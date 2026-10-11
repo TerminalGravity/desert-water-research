@@ -1,251 +1,397 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Water From Stone — Desert Water Sustainability Research, Lake Havasu & Mohave Mountains</title>
-<meta name="description" content="Research notebook on catchment, harvesting, recharge and groundwater policy in northwest Arizona, by Jack Felke.">
+<title>Desert Water Research: Lake Havasu City and the Mohave Mountains</title>
+<meta name="description" content="A desk study of catchment, harvesting, recharge and groundwater policy in northwest Arizona, by Jack Felke. Estimates are labeled; no field measurements yet.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <link rel="stylesheet" href="assets/style.css">
 </head><body>
-<nav id="nav"><a class="brand" href="#top">WATER FROM STONE</a><a href="#overview">Scenario</a><a href="#terrain-sec">Terrain</a><a href="#harvest">Runoff</a><a href="#awh">Air water</a><a href="#mar">Recharge</a><a href="#lhc">Havasu reuse</a><a href="#hualapai">Hualapai</a><a href="#sacramento">Sacramento</a><a href="#yield">Yield math</a><a href="#evap">Evaporation</a><a href="#storage">Storage</a><a href="#policy">Policy</a><a href="#evidence">Evidence</a></nav>
-<main id="top">
+<nav class="toc" aria-label="Contents"><a class="brand" href="#top">Desert Water Research</a><a href="#method">Method</a><a href="#questions">Open questions</a><a href="#data">Existing data</a><a href="#roadmap">Roadmap</a><a href="protocol.html">Validation protocol</a><a href="#why">Why it matters</a><a href="#terrain-sec">Terrain</a><a href="#harvest">Runoff</a><a href="#awh">Air water</a><a href="#mar">Recharge</a><a href="#lhc">Havasu reuse</a><a href="#hualapai">Hualapai</a><a href="#sacramento">Sacramento</a><a href="#yield">Estimate tool</a><a href="#costs">Costs</a><a href="#evap">Evaporation</a><a href="#storage">Storage</a><a href="#policy">Policy</a><a href="#evidence">Evidence</a></nav>
+<div class="layout" id="top">
+<main>
 
-<section class="hero" id="overview">
-<div class="kicker">Scenario · Lake Havasu City &amp; the Mohave Mountains, Arizona</div>
-<h1>Can a 4‑inch desert catch, keep, and bank its own water?</h1>
-<p class="lede">The scenario: a city of the Colorado River sits beneath a 5,100‑ft granite range. A little over four inches of rain falls in a normal year<a class="sup" href="#r1">[1]</a>, while a pan of open water in the region can lose roughly 100 inches<a class="sup" href="#r3">[3]</a>. Inland, the Hualapai Valley aquifer is drawn down by an estimated ~50,000 acre‑feet a year more than it receives<a class="sup" href="#r14">[14]</a>. This notebook follows one path through the problem: map the catchment, harvest what runs off, keep it out of the sun, and push it underground, then weigh what the evidence supports.</p>
-<div class="grid" style="margin-top:28px">
-<div class="card"><div class="stat">4.16 in</div>Annual precipitation normal, Lake Havasu City, 1991–2020 <a href="#r1">[1]</a></div>
-<div class="card"><div class="stat">101.5 in</div>Annual pan evaporation, Davis Dam station (1948–61), nearest WRCC pan record <a href="#r3">[3]</a></div>
-<div class="card"><div class="stat">5,102 ft</div>Crossman Peak summit, Mohave Mountains <a href="#r5">[5]</a></div>
-<div class="card"><div class="stat">−50,474 AF/yr</div>Hualapai Valley basin deficit, Mohave County 2024 update <a href="#r14">[14]</a></div>
+<section id="overview" data-view="overview">
+<div class="kicker">Scenario · Lake Havasu City and the Mohave Mountains, Arizona</div>
+<h1>Can a 4-inch desert catch, keep, and bank its own water?</h1>
+<p class="lede">Lake Havasu City sits on the Colorado River below the Mohave Mountains, whose highest point is a 5,100-ft granite peak. A normal year brings a little over four inches of rain<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup>. A pan of open water in the region can lose about 100 inches a year to evaporation<sup class="c"><a href="#r3" aria-label="Reference 3">3</a></sup>. Inland, the Hualapai Valley aquifer is estimated to lose about 50,000 acre-feet a year more than it receives<sup class="c"><a href="#r14" aria-label="Reference 14">14</a></sup>.</p>
+<p>This is a desk study built from public data and published sources. It follows one path through the problem: map the catchment, estimate what runs off, keep it out of the sun, and push it underground. Nothing here has been measured in the field yet. Read <a href="#method">what this is and isn't</a> before using any number.</p>
+<div class="stats">
+<div><b>4.16 in</b><span>Annual precipitation normal, Lake Havasu City, 1991–2020<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup></span></div>
+<div><b>101.5 in</b><span>Annual pan evaporation, Davis Dam station (1948–61), the nearest pan record<sup class="c"><a href="#r3" aria-label="Reference 3">3</a></sup></span></div>
+<div><b>5,102 ft</b><span>Crossman Peak summit, Mohave Mountains<sup class="c"><a href="#r5" aria-label="Reference 5">5</a></sup></span></div>
+<div><b>−50,474 acre-ft/yr</b><span>Hualapai Valley basin deficit, Mohave County 2024 update<sup class="c"><a href="#r14" aria-label="Reference 14">14</a></sup></span></div>
 </div>
 <h3>The path</h3>
-<p>1. <b>Terrain</b> → where water goes. 2. <b>Harvest</b> → how much monsoon and winter runoff can be captured. 3. <b>Storage</b> → how to beat evaporation. 4. <b>Recharge</b> → banking water in aquifers. 5. <b>Policy</b> → who controls groundwater. 6. <b>Reflection</b> → what's still unknown.</p>
-<div class="tw" style="margin-top:22px"><div id="map" role="region" aria-label="Map of study area"></div></div>
-<p style="font-size:14px;color:var(--muted)">Markers: city and peak use published coordinates <a href="#r5">[5]</a>; valley markers are approximate centroids for orientation only. Tiles © OpenStreetMap contributors, OpenTopoMap (CC‑BY‑SA).</p>
+<ol><li><b>Terrain:</b> where water goes.</li><li><b>Harvest:</b> how much runoff might be captured.</li><li><b>Storage:</b> how to beat evaporation.</li><li><b>Recharge:</b> banking water in aquifers.</li><li><b>Policy:</b> who controls groundwater.</li><li><b>Reflection:</b> what's still unknown.</li></ol>
+<figure class="fig"><div id="map" role="region" aria-label="Map of the study area"></div>
+<figcaption>Lake Havasu City, Crossman Peak, Kingman, the radio towers<sup class="c"><a href="#r35" aria-label="Reference 35">35</a></sup> and Falls Springs Wash<sup class="c"><a href="#r37" aria-label="Reference 37">37</a></sup> use published coordinates<sup class="c"><a href="#r5" aria-label="Reference 5">5</a></sup>. The Hualapai and Sacramento valley markers are approximate centroids. The Mohave Mountains outline is hand-drawn. None of these are official ADWR basin boundaries. Tiles © OpenStreetMap contributors and OpenTopoMap (CC-BY-SA).</figcaption></figure>
 </section>
 
-<section id="terrain-sec">
-<div class="kicker">Path · Step 1: Terrain</div>
-<h2>3D terrain, photogrammetry and catchment analysis</h2>
-<p>The Mohave Mountains rise east of Lake Havasu City to Crossman Peak (34.5489° N, 114.1885° W; about 5,102 ft / 1,555 m per Peakbagger <a href="#r5">[5]</a>; the user‑cited ~5,103 ft is within survey rounding). Steep, thin‑soiled granite and volcanic slopes shed water quickly into washes that cross the alluvial fans toward the lake. To harvest or recharge that water you first need to know where it goes.</p>
-<div class="grid">
-<div class="card"><h3>1 · Base DEM</h3>USGS 3D Elevation Program (3DEP) provides public lidar‑derived and 1/3 arc‑second (~10 m) DEMs, downloadable through The National Map <a href="#r6">[6]</a>.</div>
-<div class="card"><h3>2 · Drone photogrammetry</h3>For candidate sub‑catchments: plan overlapping grid flights (commonly 70–80% overlap), set surveyed ground control points, process with structure‑from‑motion (e.g. OpenDroneMap) to a cm‑scale DSM and orthomosaic. <span class="tag t-mod">method plan</span></div>
-<div class="card"><h3>3 · Hydro‑conditioning</h3>Fill sinks / breach depressions, compute D8 or D‑infinity flow direction, then flow accumulation (e.g. WhiteboxTools, TauDEM, GRASS <code>r.watershed</code>).</div>
-<div class="card"><h3>4 · Delineation</h3>Snap pour points at proposed check‑dam or cistern sites; derive contributing area, slope distribution and stream order for each catchment.</div>
+<section id="method" data-view="overview">
+<div class="kicker">Method · Read this first</div>
+<h2>What this is and isn't</h2>
+<div class="cols">
+<div class="box"><h3>This is</h3><ul>
+<li>A desk study compiled from public data and published sources, each cited.</li>
+<li>A 3D <i>view</i> of public USGS 3DEP elevation data, rendered as a surface with 1.5× vertical exaggeration<sup class="c"><a href="#r64" aria-label="Reference 64">64</a></sup>. The data was exported from the 3DEP Elevation ImageServer and resampled to about 50 m (3D mesh) and 25 m (drainage analysis) grids.</li>
+<li>A computed drainage network (D8 flow accumulation) on that resampled DEM.</li>
+<li>Runoff <b>estimates</b> from a formula: area × the NOAA 1991–2020 rainfall normal (4.16 in/yr at Lake Havasu City)<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup> × 27,154 gal/in/acre × an <b>assumed</b> runoff coefficient.</li>
+<li>A proposed research path. Its steps have not been carried out yet.</li></ul></div>
+<div class="box"><h3>This isn't</h3><ul>
+<li><b>No drone-captured terrain model or photogrammetry exists yet.</b> Drone capture is a proposed next step (<a href="#roadmap">roadmap</a>).</li>
+<li><b>Runoff estimates are not field measurements.</b> They are formula outputs, shown as ranges.</li>
+<li><b>No rain gauge or measured runoff exists for the Mohave Mountains</b> in this study. The rainfall figure is the valley-floor normal at the city.</li>
+<li>The catchment boundaries are computed from a resampled DEM. They have not been field-checked.</li>
+<li>Not engineering, legal or water-rights advice.</li></ul></div>
 </div>
-<p>The live view below drapes OpenTopoMap over public AWS Terrain Tiles (Terrarium encoding, derived in the US largely from USGS 3DEP/NED) <a href="#r6">[6]</a>, exaggerated 1.5× for legibility. Drag to rotate (right‑click / two fingers).</p>
-<div id="terrain" role="region" aria-label="3D terrain of the Mohave Mountains"></div>
-<p id="terrain-fallback" style="display:none" class="note flag">3D terrain could not be loaded in this browser (WebGL unavailable). Use the 2D map above.</p>
 </section>
 
-<section id="harvest">
+<section id="questions" data-view="catchment">
+<div class="callout">
+<div class="kicker">Reflection · Open questions</div>
+<h2>What we don't know yet</h2>
+<ul>
+<li><b>Mountain rainfall:</b> What does it actually rain on Crossman Peak? No long-term high-elevation rain gauge was found in the Mohave Mountains.</li>
+<li><b>Runoff rates:</b> No measured runoff coefficients exist here for local granite and volcanic slopes. The 0.20–0.60 range used in the estimate tool is assumed.</li>
+<li><b>Terrain detail:</b> There is no drone photogrammetry yet. Free 1 m lidar exists (see <a href="#data">existing data</a>), but it cannot show current rock surfaces, pooling or flow marks after a storm.</li>
+<li><b>Water rights:</b> What is the legal status of capturing flow from washes, as opposed to roofs and bare slopes?</li>
+<li><b>Policy:</b> Would Hualapai or Sacramento Valley meet AMA criteria if subsidence emerges?</li></ul>
+<p style="margin:0">How to answer these: see the <a href="#roadmap">roadmap</a> and the open <a href="protocol.html">runoff validation protocol</a>.</p>
+</div>
+</section>
+
+<section id="data" data-view="overview">
+<div class="kicker">Evidence · Data inventory</div>
+<h2>Existing data vs. drone capture</h2>
+<p>A lot of public data already covers this range. Drones add value only where it falls short, so the inventory comes first.</p>
+<div class="tw"><table><caption>Table 1. Data sources for the Mohave Mountains study area</caption>
+<thead><tr><th>Source</th><th>Resolution (m or cm)</th><th>Revisit / timing</th><th>Cost (USD)</th><th>Access / license</th></tr></thead><tbody>
+<tr><td>USGS 3DEP lidar, AZ MohaveCoconino 1 D23</td><td>28.28 pts/m²; 1 m bare-earth DEMs</td><td>One-time; flown 18 Oct 2023 – 27 Sep 2024<sup class="c"><a href="#r58" aria-label="Reference 58">58</a></sup></td><td>Free</td><td>Public domain. DEMs via The National Map<sup class="c"><a href="#r63" aria-label="Reference 63">63</a></sup>; point clouds as public EPT on AWS (raw LAZ in a requester-pays bucket)<sup class="c"><a href="#r60" aria-label="Reference 60">60</a></sup></td></tr>
+<tr><td>3DEP seamless DEMs</td><td>~10 m (1/3″); ~30 m (1″)</td><td>Updated as new data arrive</td><td>Free</td><td>Public domain<sup class="c"><a href="#r57" aria-label="Reference 57">57</a>,<a href="#r61" aria-label="Reference 61">61</a>,<a href="#r62" aria-label="Reference 62">62</a></sup></td></tr>
+<tr><td>Sentinel-2 (ESA Copernicus)</td><td>10 m (4 bands), 20 m, 60 m</td><td>5 days (two satellites, equator); 2–3 days mid-latitudes</td><td>Free</td><td>Open<sup class="c"><a href="#r65" aria-label="Reference 65">65</a>,<a href="#r66" aria-label="Reference 66">66</a></sup></td></tr>
+<tr><td>Landsat 8/9 (USGS/NASA)</td><td>30 m (15 m pan)</td><td>16 days per satellite; program archive to 1972</td><td>Free</td><td>Open<sup class="c"><a href="#r67" aria-label="Reference 67">67</a>,<a href="#r74" aria-label="Reference 74">74</a></sup></td></tr>
+<tr><td>Sentinel-1 SAR</td><td>5 × 20 m single-look (IW mode); ~10 m products</td><td>6 days (two satellites, equator); sees through cloud</td><td>Free</td><td>Open<sup class="c"><a href="#r68" aria-label="Reference 68">68</a>,<a href="#r75" aria-label="Reference 75">75</a></sup></td></tr>
+<tr><td>Planet SkySat</td><td>0.50 m</td><td>Taskable; up to 10× daily</td><td>Commercial</td><td>License<sup class="c"><a href="#r69" aria-label="Reference 69">69</a></sup></td></tr>
+<tr><td>Vantor (formerly Maxar) WorldView Legion</td><td>“30 cm class” (0.34 m native pan)</td><td>Taskable</td><td>Commercial</td><td>License<sup class="c"><a href="#r70" aria-label="Reference 70">70</a>,<a href="#r77" aria-label="Reference 77">77</a></sup></td></tr>
+<tr><td>Commercial archive / tasking (30–50 cm)</td><td>0.30–0.50 m</td><td>Archive or new capture</td><td>Archive ~$8–27/km²; tasking ~$14–38/km²</td><td>Rate card<sup class="c"><a href="#r72" aria-label="Reference 72">72</a>,<a href="#r73" aria-label="Reference 73">73</a></sup></td></tr>
+<tr><td>Drone photogrammetry (proposed)</td><td>1–3 cm/px</td><td>On demand, e.g. the day after a monsoon storm</td><td>Unknown for this site</td><td>Project-owned<sup class="c"><a href="#r77" aria-label="Reference 77">77</a>,<a href="#r79" aria-label="Reference 79">79</a></sup></td></tr>
+</tbody></table></div>
+<p class="fn">The 30–50 cm prices are Geopera's published rates. Geopera also notes that archive imagery typically costs 40–60% less than tasking the same resolution<sup class="c"><a href="#r73" aria-label="Reference 73">73</a></sup>. Free sub-meter imagery is released mainly for disasters, through Vantor's Open Data Program (CC BY-NC 4.0)<sup class="c"><a href="#r71" aria-label="Reference 71">71</a></sup>. Free imagery cannot be tasked. Web basemaps are mosaics with no single capture date, and their terms generally license them for display only.</p>
+<h3>What each source can and can't tell us</h3>
+<ul>
+<li><b>3DEP 1 m lidar:</b> Can map drainage networks, slope and catchment boundaries across the whole range. It cannot show current surface conditions after a storm, because it is a single 2023–24 snapshot<sup class="c"><a href="#r58" aria-label="Reference 58">58</a></sup>.</li>
+<li><b>Sentinel-2 / Landsat:</b> Can show vegetation, land cover and decades of change. At 10–30 m they cannot resolve individual washes, check dams or pooling.</li>
+<li><b>Sentinel-1 SAR:</b> Can see through monsoon cloud and detect surface change. It does not produce a usable visual image of small structures.</li>
+<li><b>Commercial 30–50 cm:</b> Can show larger features and be tasked. It is not centimeter-scale, and it costs money per km².</li>
+<li><b>Drones:</b> Can deliver 1–3 cm orthomosaics on demand, showing rock type, vegetation and standing water<sup class="c"><a href="#r77" aria-label="Reference 77">77</a>,<a href="#r79" aria-label="Reference 79">79</a></sup>. Drone lidar can penetrate vegetation to bare earth; photogrammetry models only the visible surface<sup class="c"><a href="#r78" aria-label="Reference 78">78</a></sup>. Drones cover only small areas per day<sup class="c"><a href="#r77" aria-label="Reference 77">77</a></sup>.</li>
+</ul>
+<div class="note"><b>Recommendation:</b> Use free 3DEP lidar for range-scale catchment analysis. Use drone photogrammetry to design infrastructure in individual sub-catchments. Use drone lidar where vegetation or complex terrain hides the ground: basin first, site second.</div>
+</section>
+
+<section id="roadmap" data-view="drone">
+<div class="kicker">Path · Next steps</div>
+<h2>Roadmap: turning open questions into a plan</h2>
+<ol class="steps">
+<li><b>Drone photogrammetry flight plan</b> for sub-catchment D1 (about 118 acres, below the radio towers) and later the Falls Springs Wash catchment. Both footprints are shown in the 3D panel.
+<ul>
+<li><i>Overlap:</i> Plan at least 80% forward and 70% side overlap. Raise it on steep slopes, because effective overlap drops as the terrain rises toward the camera. Add oblique images<sup class="c"><a href="#r44" aria-label="Reference 44">44</a></sup>.</li>
+<li><i>Altitude:</i> Fly terrain-following from the 1 m 3DEP DEM so height above ground, and therefore ground sample distance (GSD), stays constant<sup class="c"><a href="#r44" aria-label="Reference 44">44</a></sup>. GSD = pixel size × distance ÷ focal length; typical 1–3 cm at drone altitudes<sup class="c"><a href="#r77" aria-label="Reference 77">77</a></sup>.</li>
+<li><i>Ground control:</i> Use well-distributed, non-collinear GCPs including the perimeter, at least 4–5<sup class="c"><a href="#r45" aria-label="Reference 45">45</a></sup>. On inaccessible slopes, use RTK/PPK imagery plus at least 3 GCPs at the base or top<sup class="c"><a href="#r46" aria-label="Reference 46">46</a></sup>.</li>
+<li><i>Rules:</i> FAA Part 107, with a 400 ft above-ground ceiling<sup class="c"><a href="#r47" aria-label="Reference 47">47</a></sup>. Lake Havasu City Airport (KHII) is non-towered, in Class G airspace<sup class="c"><a href="#r49" aria-label="Reference 49">49</a>,<a href="#r50" aria-label="Reference 50">50</a></sup>. Check current airspace and NOTAMs before each flight, and use LAANC if any part of the area is controlled<sup class="c"><a href="#r48" aria-label="Reference 48">48</a></sup>.</li></ul></li>
+<li><b>Rain gauge network:</b> Place tipping-bucket gauges along the mountain-front elevation transect. Sites: the valley NOAA station (existing)<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup>; Falls Springs Wash at about 1,750 ft<sup class="c"><a href="#r37" aria-label="Reference 37">37</a></sup>; the road end at about 3,275 ft<sup class="c"><a href="#r38" aria-label="Reference 38">38</a></sup>; near the towers at about 4,700 ft<sup class="c"><a href="#r35" aria-label="Reference 35">35</a>,<a href="#r38" aria-label="Reference 38">38</a></sup>; plus two inside sub-catchment D1. Details are in the <a href="protocol.html#gauges">protocol</a>.</li>
+<li><b>Runoff coefficient validation:</b> Build a small test catchment with a 90° V-notch or rectangular weir and a stage logger, or use bucket-and-timer for small flows<sup class="c"><a href="#r56" aria-label="Reference 56">56</a>,<a href="#r81" aria-label="Reference 81">81</a></sup>. Compute C = runoff volume ÷ (rainfall depth × catchment area). Full method: <a href="protocol.html">validation protocol</a>.</li>
+<li><b>Permitting checklist</b> (confirm each item with the agency):
+<ul>
+<li>BLM Lake Havasu Field Office: land-use authorization for any structure or instrument on public land<sup class="c"><a href="#r51" aria-label="Reference 51">51</a></sup>. BLM has acted as a cooperating agency on NEPA review at Crossman Peak before<sup class="c"><a href="#r52" aria-label="Reference 52">52</a></sup>.</li>
+<li>NEPA review for any federal authorization<sup class="c"><a href="#r52" aria-label="Reference 52">52</a></sup>.</li>
+<li>ADWR: Underground Storage Facility and Water Storage permits for recharge<sup class="c"><a href="#r53" aria-label="Reference 53">53</a>,<a href="#r54" aria-label="Reference 54">54</a></sup>. Surface-water rights status for capturing wash flow is an <a href="#questions">open question</a>.</li>
+<li>ADEQ: water-quality and aquifer-protection determinations tied to recharge<sup class="c"><a href="#r54" aria-label="Reference 54">54</a>,<a href="#r7" aria-label="Reference 7">7</a></sup>.</li>
+<li>Mohave County Development Services: floodplain and grading rules. <span class="status s-rep">to confirm</span></li>
+<li>SHPO / tribal consultation: a cultural-resources survey under NHPA Section 106 for any federal undertaking<sup class="c"><a href="#r55" aria-label="Reference 55">55</a></sup>.</li></ul></li>
+</ol>
+</section>
+
+<section id="why" data-view="overview">
+<div class="kicker">Context</div>
+<h2>Why this matters: an over-allocated river</h2>
+<p>The 1922 Colorado River Compact apportions 7.5 million acre-feet (maf) a year to the Upper Basin and 7.5 maf to the Lower Basin. Arizona's share of the Lower Basin is 2.8 maf<sup class="c"><a href="#r40" aria-label="Reference 40">40</a></sup>. For calendar year 2026, Reclamation declared a Tier 1 Lower Basin shortage. It projected Lake Mead at 1,055.88 ft on January 1, which cut Arizona's apportionment by 320,000 acre-ft and required a further 192,000 acre-ft drought-contingency contribution: 512,000 acre-ft in total<sup class="c"><a href="#r39" aria-label="Reference 39">39</a></sup>. Proposals for the post-2026 rules have been reported to include combined Lower Basin cuts of up to 3 maf a year<sup class="c"><a href="#r41">41</a></sup> <span class="status s-rep">reported</span>.</p>
+<p>Lake Havasu alone loses an estimated 139,626 acre-ft a year to evaporation<sup class="c"><a href="#r4" aria-label="Reference 4">4</a></sup>. That is why this study is framed as an engineering opportunity: every gallon captured and stored before it evaporates is a gallon that doesn't need to come from an over-allocated river.</p>
+</section>
+
+<section id="terrain-sec" data-view="catchment">
+<div class="kicker">Path · Step 1: Terrain</div>
+<h2>Terrain data and catchment analysis</h2>
+<p>The Mohave Mountains rise east of Lake Havasu City to Crossman Peak (34.5489° N, 114.1885° W; 5,102 ft / 1,555 m)<sup class="c"><a href="#r5" aria-label="Reference 5">5</a></sup>. The radio towers sit on the west ridge at about 4,712 ft<sup class="c"><a href="#r35" aria-label="Reference 35">35</a>,<a href="#r36" aria-label="Reference 36">36</a></sup>. Steep, thin-soiled slopes shed water quickly into washes such as Falls Springs Wash, which crosses the alluvial fans toward the city<sup class="c"><a href="#r37" aria-label="Reference 37">37</a></sup>.</p>
+<p><b>What has been done (desk analysis):</b> USGS 3DEP elevation was exported from the 3DEP ImageServer, which serves the best available 3DEP DEM; 1 m lidar DEMs exist for this area<sup class="c"><a href="#r63" aria-label="Reference 63">63</a>,<a href="#r64" aria-label="Reference 64">64</a></sup>. The export was resampled to about 25 m. Depressions were filled with a priority-flood algorithm. Then D8 flow direction and flow accumulation were computed, and the catchment above the Falls Springs Wash GNIS point was delineated: about 12.98 km² (3,206 acres), spanning about 529–1,546 m. The resampling smooths the summit: 1,546 m on this grid versus the published 1,555 m<sup class="c"><a href="#r5" aria-label="Reference 5">5</a></sup>.</p>
+<p><b>Proposed (not done):</b> Drone photogrammetry of sub-catchment D1, plus a re-run of the analysis on the full 1 m lidar.</p>
+<div class="note"><b>About the 3D panel.</b> It shows public USGS 3DEP elevation data, not a project-built terrain model. The mesh grid is about 50 m. Shading combines hillshade, 100 m contours and computed flow paths. Vertical exaggeration is 1.5×. Zooming into sub-catchment D1 switches the source indicator to “Drone orthomosaic, 1–3 cm, pending capture” and shows a hatched footprint, not imagery, because none exists yet. Basin first, site second. Use the <i>Source</i> buttons or keyboard to switch manually.</div>
+</section>
+
+<section id="harvest" data-view="catchment">
 <div class="kicker">Path · Step 2: Harvest</div>
 <h2>Rainwater harvesting from monsoon runoff on steep slopes</h2>
-<p>Lake Havasu's rain arrives in two seasons: winter frontal storms (Dec–Mar, the wettest months) and the July–September monsoon. Normals: Jan 0.75 in, Aug 0.38 in, Jun 0.01 in <a href="#r1">[1]</a>. Monsoon cells are brief and intense; on bare rock a high fraction runs off, but much of it also arrives as sediment‑laden flash flow.</p>
-<div class="chart"><canvas id="precipChart" aria-label="Monthly precipitation and pan evaporation"></canvas></div>
-<p style="font-size:14px;color:var(--muted)">Precipitation: NOAA 1991–2020 normals, station USC00024761 <a href="#r1">[1]</a>. Evaporation: WRCC monthly pan averages for Davis Dam, ~60 mi north, 1948–61 <a href="#r3">[3]</a> (no long pan record exists at Lake Havasu City itself; treat as a regional proxy).</p>
+<p>Lake Havasu's rain comes in two seasons: winter frontal storms (December–March, the wettest months) and the July–September monsoon. Monthly normals include January 0.75 in, August 0.38 in and June 0.01 in<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup>.</p>
+<figure class="fig"><div class="chart"><canvas id="precipChart" aria-label="Monthly precipitation normal and pan evaporation"></canvas></div>
+<figcaption>Precipitation: NOAA 1991–2020 normals, station USC00024761<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup>. Evaporation: WRCC monthly pan averages for Davis Dam, about 60 miles north, 1948–61<sup class="c"><a href="#r3" aria-label="Reference 3">3</a></sup>. There is no long pan record at Lake Havasu City itself, so treat this as a regional proxy.</figcaption></figure>
 <h3>Design notes for steep slopes</h3>
-<ul><li>Capture at slope breaks or narrow bedrock channels where a small weir/diversion can intercept flow with little fill.</li>
-<li>Pre‑settle sediment (trash racks, settling pools) before cisterns; monsoon runoff carries heavy bedload.</li>
-<li>Size for event volume, not annual totals: a rare 1‑inch storm delivers about 25% of a normal year in hours. <span class="tag t-mod">reasoned from [1]</span></li>
-<li>Arizona permits rainwater harvesting by property owners, but diverting flow in a defined watercourse can raise surface‑water‑right questions; confirm with ADWR before building in washes. <span class="tag t-rep">open question</span></li></ul>
+<ul><li>Capture at slope breaks or narrow bedrock channels, where a small weir or diversion can intercept flow with little fill.</li>
+<li>Settle out sediment before it reaches cisterns. Monsoon runoff carries heavy bedload.</li>
+<li>Size storage for individual storms, not annual totals: a single 1-inch storm equals about 24% of the 4.16 in annual normal (arithmetic from<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup>).</li>
+<li>Diverting flow in a defined watercourse may raise surface-water-right questions. <span class="status s-rep">open question</span></li></ul>
 </section>
 
-<section id="awh">
+<section id="awh" data-view="overview">
 <div class="kicker">Path · Alternative: Air</div>
 <h2>Atmospheric water harvesting in a dry climate</h2>
-<div class="tw"><table><thead><tr><th>Technology</th><th>Reported yield</th><th>Conditions</th><th>Havasu fit</th></tr></thead><tbody>
-<tr><td>UNLV hydrogel‑membrane / liquid desiccant (Cho lab)</td><td>1.99 L/m²/day (natural wind); 5.50 L/m²/day (small fan) <a href="#r23">[23]</a>; press release: "about a gallon … per day in Las Vegas" per m² <a href="#r22">[22]</a></td><td>Outdoor Las Vegas tests; effective down to ~10% RH; output is water held in a salt solution needing further processing <a href="#r22">[22]</a></td><td>Most promising of the three for Mojave‑like air; still early‑stage and energy for desorption is needed.</td></tr>
-<tr><td>MOF‑801 sorbent (Yaghi / MIT, Arizona field test)</td><td>~0.07 L per kg MOF per day‑night cycle (measured) <a href="#r24">[24]</a></td><td>Tempe, AZ, RH ~5–40%, passive solar</td><td>Proven to work in Arizona air, but grams–liters, not household scale, per kg.</td></tr>
-<tr><td>Fog nets (Raschel mesh)</td><td>Typically ~1–10 L/m²/day at good fog sites <a href="#r25">[25]</a></td><td>Requires frequent advective/orographic fog</td><td>Poor: Lake Havasu lacks a persistent fog regime. Not recommended.</td></tr>
+<div class="tw"><table><caption>Table 2. Reported atmospheric water yields</caption><thead><tr><th>Technology</th><th>Reported yield</th><th>Test conditions</th><th>Fit for Havasu</th></tr></thead><tbody>
+<tr><td>UNLV hydrogel membrane / liquid desiccant</td><td>1.99 L/m²/day (natural wind); 5.50 L/m²/day (small fan)<sup class="c"><a href="#r23" aria-label="Reference 23">23</a></sup>; UNLV release: “about a gallon … per day in Las Vegas” per m²<sup class="c"><a href="#r22" aria-label="Reference 22">22</a></sup></td><td>Outdoor Las Vegas tests; effective down to ~10% RH. Output is water in a salt solution that needs further processing<sup class="c"><a href="#r22" aria-label="Reference 22">22</a></sup></td><td>The most promising of the three for Mojave-like air, but still early-stage</td></tr>
+<tr><td>MOF-801 sorbent (Arizona field test)</td><td>~0.07 L per kg MOF per day-night cycle<sup class="c"><a href="#r24" aria-label="Reference 24">24</a></sup></td><td>Tempe, AZ, ~5–40% RH, passive solar</td><td>Proven in Arizona air, but tiny output</td></tr>
+<tr><td>Fog nets (Raschel mesh)</td><td>~1–10 L/m²/day at good fog sites<sup class="c"><a href="#r25" aria-label="Reference 25">25</a></sup></td><td>Requires frequent fog</td><td>Poor: Lake Havasu lacks a persistent fog regime</td></tr>
 </tbody></table></div>
-<div class="note"><b>Evidence check — UNLV "1 gallon/m²/day".</b> <span class="tag t-ok">supported, with caveats</span> The UNLV release quotes Prof. H. Jeremy Cho: "about a gallon of water per day in Las Vegas" from one square meter <a href="#r22">[22]</a>. The peer‑reviewed PNAS paper reports 1.99 L/m²/day (≈0.53 gal) with natural wind and 5.50 L/m²/day (≈1.45 gal) with a fan <a href="#r23">[23]</a>. So "~1 gal/m²/day" sits inside the measured range but depends on airflow and humidity, and the captured water is in a brine, not yet drinking water. Calculator range below: 0.5–1.5 gal/m²/day.</div>
+<div class="note"><b>Evidence check: UNLV “1 gal/m²/day”.</b> <span class="status s-ok">supported, conditional</span> The figure falls inside the measured range of 1.99–5.50 L/m²/day (0.53–1.45 gal) but depends on airflow and humidity<sup class="c"><a href="#r23" aria-label="Reference 23">23</a></sup>. The water is captured as brine and is not potable as produced<sup class="c"><a href="#r22" aria-label="Reference 22">22</a></sup>.</div>
 </section>
 
-<section id="mar">
+<section id="mar" data-view="catchment">
 <div class="kicker">Path · Step 4: Bank it</div>
 <h2>Managed aquifer recharge: check dams, gabions, infiltration basins</h2>
-<div class="grid">
-<div class="card"><h3>Check dams</h3>Low rock or concrete barriers in ephemeral channels slow flow and trap sediment. A USGS study in Arizona's Chiricahua Mountains found check dams reduced peak runoff but did not reduce overall flow volume <a href="#r27">[27]</a>.</div>
-<div class="card"><h3>Gabions</h3>Wire baskets of rock. A University of Arizona study of an ephemeral stream found gabions raised infiltrated volume by ~10% on average for a ~5‑hour flow, with modeled outcomes ranging from no effect to ~255% <a href="#r26">[26]</a>.</div>
-<div class="card"><h3>Infiltration basins</h3>Spreading basins on permeable alluvial‑fan soils. In the Hualapai basin, an "infiltration project" was credited with 1,200 AF/yr in the 2021 USGS budget but excluded from the 2024 county update <a href="#r14">[14]</a>.</div>
-</div>
-<div class="note">Reflection: in these valleys, natural aquifer recharge is under 1% of precipitation that falls on them (13,100 AF/yr of ~1.74 million AF/yr across Detrital, Hualapai and Sacramento valleys) <a href="#r34">[34]</a>. Small structures can nudge that fraction, but the evidence base for large gains is thin and site‑specific.</div>
+<ul>
+<li><b>Check dams:</b> In Arizona's Chiricahua Mountains, check dams reduced peak runoff but not overall flow volume<sup class="c"><a href="#r27" aria-label="Reference 27">27</a></sup>.</li>
+<li><b>Gabions:</b> In one ephemeral stream, gabions raised infiltrated volume by about 10% on average for a roughly 5-hour flow. Modeled outcomes ranged from no effect to about 255%<sup class="c"><a href="#r26" aria-label="Reference 26">26</a></sup>.</li>
+<li><b>Infiltration basins:</b> In the Hualapai basin, an infiltration project was credited with 1,200 acre-ft/yr in the 2021 USGS budget, but it was excluded from the 2024 county update<sup class="c"><a href="#r14" aria-label="Reference 14">14</a></sup>.</li>
+</ul>
+<div class="note">Reflection: in these valleys, natural aquifer recharge is under 1% of the precipitation that falls on them: 13,100 of about 1.74 million acre-ft/yr<sup class="c"><a href="#r34" aria-label="Reference 34">34</a></sup>.</div>
 </section>
 
-<section id="lhc">
+<section id="lhc" data-view="city">
 <div class="kicker">Evidence · Local precedent</div>
-<h2>Lake Havasu City's reuse‑water and recharge program</h2>
-<p>Lake Havasu City was founded by Robert McCulloch in 1963; its first golf course (London Bridge) opened in 1967 <a href="#r10">[10]</a>. Golf and landscape irrigation later became the main outlet for the city's treated effluent: close to half of effluent (~2,000 AF/yr) went to four golf courses and other irrigators, the rest percolated or injected <a href="#r9">[9]</a>; about 1,850 AF of effluent was sold for irrigation in 2018 <a href="#r11">[11]</a>.</p>
-<p>The <b>recharge</b> program is much newer. In December 2008 the city began injecting ultrafiltered effluent from the North Regional WWTP into four 180‑ft vadose‑zone wells, described as the first treated‑wastewater recharge project along the lower Colorado River <a href="#r7">[7]</a>. The pilot (Dec 2008–Apr 2009) used 180 AF and built a ~200‑ft‑thick groundwater mound <a href="#r7">[7]</a>. It followed a sewer expansion replacing almost 28,000 septic tanks <a href="#r7">[7]</a>. The 2022 Wastewater Master Plan describes a "closed system" where effluent must be reused or recharged, and recommends ~2 MGD of additional vadose wells <a href="#r8">[8]</a>.</p>
-<div class="note flag"><b>Correction — "since 1967".</b> <span class="tag t-fix">corrected</span> We found no source for a reuse‑water <i>recharge</i> program since 1967. 1967 matches the opening of the city's first golf course <a href="#r10">[10]</a>. The documented effluent recharge program dates to <b>December 2008</b> <a href="#r7">[7]</a>. Suggested wording: "Lake Havasu City has reused treated effluent for irrigation for decades and has recharged it through vadose‑zone wells since 2008."</div>
+<h2>Lake Havasu City's reuse-water and recharge program</h2>
+<p>Robert McCulloch founded Lake Havasu City in 1963. Its first golf course opened in 1967<sup class="c"><a href="#r10" aria-label="Reference 10">10</a></sup>. Close to half of the city's effluent, about 2,000 acre-ft/yr, has gone to irrigating golf courses and other turf<sup class="c"><a href="#r9" aria-label="Reference 9">9</a></sup>. About 1,850 acre-ft was sold for irrigation in 2018<sup class="c"><a href="#r11" aria-label="Reference 11">11</a></sup>.</p>
+<p>In December 2008 the city began injecting ultrafiltered effluent into four 180-ft vadose-zone wells. It describes this as the first treated-wastewater recharge project on the lower Colorado River<sup class="c"><a href="#r7" aria-label="Reference 7">7</a></sup>. The pilot used 180 acre-ft<sup class="c"><a href="#r7" aria-label="Reference 7">7</a></sup>. The 2022 master plan recommends about 2 MGD of additional vadose wells<sup class="c"><a href="#r8" aria-label="Reference 8">8</a></sup>.</p>
+<div class="note flag"><b>Correction: “since 1967”.</b> <span class="status s-fix">corrected</span> No source supports a recharge program dating from 1967; that is the year the city's first golf course opened<sup class="c"><a href="#r10" aria-label="Reference 10">10</a></sup>. Recharge dates to <b>December 2008</b><sup class="c"><a href="#r7" aria-label="Reference 7">7</a></sup>.</div>
 </section>
 
-<section id="hualapai">
+<section id="hualapai" data-view="overview">
 <div class="kicker">Scenario: overdraft · Mohave County</div>
 <h2>The Hualapai Valley basin crisis</h2>
-<p>The Hualapai Valley Groundwater Basin (around Kingman) supplies the city of Kingman and a fast‑growing farm sector. Estimates of its imbalance have climbed:</p>
-<div class="tw"><table><thead><tr><th>Source</th><th class="n">Inflow (AF/yr)</th><th class="n">Outflow (AF/yr)</th><th class="n">Deficit (AF/yr)</th></tr></thead><tbody>
-<tr><td>ADWR preliminary model, Sept 2022 slides <a href="#r15">[15]</a></td><td class="n">~12,000</td><td class="n">~45,000</td><td class="n">~33,000</td></tr>
-<tr><td>ADWR INA Findings, Dec 2022 <a href="#r13">[13]</a></td><td class="n">~10,000</td><td class="n">~44,000</td><td class="n">~34,000</td></tr>
-<tr><td>USGS 2021 HVB study (as tabulated by county) <a href="#r14">[14]</a></td><td class="n">10,700</td><td class="n">41,600</td><td class="n">30,900</td></tr>
-<tr><td>Mohave County 2024 update <a href="#r14">[14]</a></td><td class="n">9,500</td><td class="n">59,974</td><td class="n">50,474</td></tr>
-</tbody></table></div>
-<div class="chart"><canvas id="budgetChart" aria-label="Hualapai basin water budget"></canvas></div>
-<p style="font-size:14px;color:var(--muted)">2024 update components <a href="#r14">[14]</a>. Agricultural pumping rose from 26,000 to 44,252 AF/yr (~60%), driving most of the deficit.</p>
-<div class="note"><b>Check — "about 50,000 AF/yr deficit".</b> <span class="tag t-ok">confirmed, with source note</span> This is Mohave County's 2024 updated forecast (‑50,474 AF/yr) <a href="#r14">[14]</a>, a county update built on the USGS 2021 study and ADWR pumping data, not an ADWR‑published figure. ADWR's 2022 INA order used ~34,000 AF/yr <a href="#r13">[13]</a>.</div>
-<h3>Timeline</h3>
-<ul><li><b>June 2022</b>: Mohave County Board of Supervisors asks ADWR to designate the basin a subsequent INA <a href="#r12">[12]</a>.</li>
-<li><b>Dec 19, 2022</b>: ADWR establishes the <b>Hualapai Valley Irrigation Non‑Expansion Area</b>; the Director found an AMA "not necessary" (no subsidence or water‑quality evidence at the time) <a href="#r13">[13]</a>. INAs bar new irrigated acreage and require metering/reporting of non‑exempt wells <a href="#r12">[12]</a>.</li>
-<li>County investigators report that ADWR had twice before rejected INA requests, and that nearly 200 new well applications were approved around Kingman before the designation; out‑of‑state agribusiness expanded in the basin <a href="#r16">[16]</a>.</li>
-<li>No AMA designation has been made for Hualapai Valley as of this writing; the Rural Groundwater Management Act failed again in the 2025 session <a href="#r16">[16]</a>.</li></ul>
-<div class="note flag"><b>Check — "AZ Attorney General suits vs Fondomonte".</b> <span class="tag t-fix">clarified</span> AG Kris Mayes sued Fondomonte Arizona (Saudi‑owned alfalfa grower) in Dec 2024 under public‑nuisance law, but over pumping in the <b>Ranegras Plain Basin, La Paz County</b>, not the Hualapai Valley <a href="#r17">[17]</a>. Fondomonte contends only ADWR can regulate groundwater; the case was pending as of Oct 2025 <a href="#r18">[18]</a>. It matters to Hualapai as a test of whether nuisance law can reach rural pumping. We found no AG suit specific to the Hualapai basin. "Out‑of‑state agribusiness ownership" in Hualapai is reported by AZCIR <a href="#r16">[16]</a>.</div>
+<div class="tw"><table><caption>Table 3. Hualapai Valley basin budget estimates</caption><thead><tr><th>Source</th><th class="n">Inflow (acre-ft/yr)</th><th class="n">Outflow (acre-ft/yr)</th><th class="n">Deficit (acre-ft/yr)</th></tr></thead><tbody>
+<tr><td>ADWR preliminary model, Sept 2022<sup class="c"><a href="#r15" aria-label="Reference 15">15</a></sup></td><td class="n">~12,000</td><td class="n">~45,000</td><td class="n">~33,000</td></tr>
+<tr><td>ADWR INA findings, Dec 2022<sup class="c"><a href="#r13" aria-label="Reference 13">13</a></sup></td><td class="n">~10,000</td><td class="n">~44,000</td><td class="n">~34,000</td></tr>
+<tr><td>USGS 2021 study, as tabulated by the county<sup class="c"><a href="#r14" aria-label="Reference 14">14</a></sup></td><td class="n">10,700</td><td class="n">41,600</td><td class="n">30,900</td></tr>
+<tr><td>Mohave County 2024 update<sup class="c"><a href="#r14" aria-label="Reference 14">14</a></sup></td><td class="n">9,500</td><td class="n">59,974</td><td class="n">50,474</td></tr></tbody></table></div>
+<figure class="fig"><div class="chart"><canvas id="budgetChart" aria-label="Hualapai basin water budget"></canvas></div><figcaption>Components of the 2024 county update<sup class="c"><a href="#r14" aria-label="Reference 14">14</a></sup>. Agricultural pumping rose from 26,000 to 44,252 acre-ft/yr.</figcaption></figure>
+<div class="note"><b>Check: “about 50,000 acre-ft/yr deficit”.</b> <span class="status s-ok">confirmed</span> The figure comes from Mohave County's 2024 update, not from ADWR. ADWR's December 2022 order used about 34,000 acre-ft/yr<sup class="c"><a href="#r13" aria-label="Reference 13">13</a></sup>.</div>
+<ul><li><b>June 2022:</b> The county asked ADWR to designate the basin an Irrigation Non-Expansion Area (INA)<sup class="c"><a href="#r12" aria-label="Reference 12">12</a></sup>.</li>
+<li><b>19 December 2022:</b> ADWR designated the Hualapai Valley INA and found an Active Management Area (AMA) “not necessary”<sup class="c"><a href="#r13" aria-label="Reference 13">13</a></sup>. INAs bar new irrigated acreage and require metering<sup class="c"><a href="#r12" aria-label="Reference 12">12</a></sup>.</li>
+<li>About 200 new well applications were approved before the designation, and out-of-state agribusiness expanded in the basin<sup class="c"><a href="#r16" aria-label="Reference 16">16</a></sup>.</li>
+<li>No AMA has been designated, and the Rural Groundwater Management Act failed again in 2025<sup class="c"><a href="#r16" aria-label="Reference 16">16</a></sup>.</li></ul>
+<div class="note flag"><b>Check: AG suit vs. Fondomonte.</b> <span class="status s-fix">clarified</span> The suit, filed in December 2024, concerns pumping in the Ranegras Plain Basin in La Paz County, not the Hualapai Valley<sup class="c"><a href="#r17" aria-label="Reference 17">17</a></sup>. It was still pending as of October 2025<sup class="c"><a href="#r18" aria-label="Reference 18">18</a></sup>. No AG suit specific to the Hualapai basin was found.</div>
 </section>
 
-<section id="sacramento">
+<section id="sacramento" data-view="overview">
 <div class="kicker">Evidence · Neighbor basin</div>
 <h2>Sacramento Valley basin</h2>
-<p>South and west of Kingman, the Sacramento Valley basin drains toward the Colorado River near Topock.</p>
-<div class="tw"><table><thead><tr><th>Estimate of natural recharge</th><th class="n">AF/yr</th><th>Source</th></tr></thead><tbody>
-<tr><td>USGS long‑term (1940–2008), alluvial aquifer</td><td class="n">6,000</td><td>USGS SIR 2011‑5159 <a href="#r19">[19]</a></td></tr>
-<tr><td>ADWR Northwest Basins Resource Assessment (2019)</td><td class="n">5,000–10,000</td><td>via Mohave County 2025 <a href="#r20">[20]</a></td></tr>
-<tr><td>Univ. of Arizona CCASS basin profile</td><td class="n">7,428 (±large)</td><td><a href="#r21">[21]</a></td></tr>
-<tr><td><i>Withdrawals (for comparison)</i>: 2007–08 / current county estimate</td><td class="n">~4,500 / 40,000–45,000</td><td><a href="#r19">[19]</a> / <a href="#r20">[20]</a></td></tr>
-</tbody></table></div>
-<div class="note"><b>Check — "about 6,000 AF/yr natural recharge".</b> <span class="tag t-ok">confirmed</span> USGS estimate <a href="#r19">[19]</a>; other estimates span 5,000–10,000. The county's 40–45k AF/yr withdrawal figure includes potential mine use <a href="#r20">[20]</a>.</div>
+<div class="tw"><table><caption>Table 4. Sacramento Valley recharge and withdrawal estimates</caption><thead><tr><th>Estimate</th><th class="n">Volume (acre-ft/yr)</th><th>Source</th></tr></thead><tbody>
+<tr><td>USGS long-term natural recharge (1940–2008)</td><td class="n">6,000</td><td><sup class="c"><a href="#r19" aria-label="Reference 19">19</a></sup></td></tr>
+<tr><td>ADWR Northwest Basins Resource Assessment (2019)</td><td class="n">5,000–10,000</td><td><sup class="c"><a href="#r20" aria-label="Reference 20">20</a></sup></td></tr>
+<tr><td>University of Arizona CCASS basin profile</td><td class="n">7,428</td><td><sup class="c"><a href="#r21" aria-label="Reference 21">21</a></sup></td></tr>
+<tr><td>Withdrawals: 2007–08 / current county estimate</td><td class="n">~4,500 / 40,000–45,000</td><td><sup class="c"><a href="#r19" aria-label="Reference 19">19</a></sup> / <sup class="c"><a href="#r20" aria-label="Reference 20">20</a></sup></td></tr></tbody></table></div>
+<div class="note"><b>Check: “about 6,000 acre-ft/yr”.</b> <span class="status s-ok">confirmed</span> This is the USGS estimate<sup class="c"><a href="#r19" aria-label="Reference 19">19</a></sup>. The county's withdrawal figure includes potential mine use<sup class="c"><a href="#r20" aria-label="Reference 20">20</a></sup>.</div>
 </section>
 
-<section id="yield">
-<div class="kicker">Evidence · Yield math</div>
-<h2>How much water does an acre of rock give?</h2>
-<p><b>Derivation.</b> 1 acre = 43,560 ft²; 1 inch = 1/12 ft; 1 ft³ = 7.48052 gal → 43,560 × (1/12) × 7.48052 = <b>27,154 gal per inch per acre</b>.</p>
-<p>At the 1991–2020 normal of 4.16 in <a href="#r1">[1]</a> and a 40% runoff coefficient: 27,154 × 4.16 × 0.40 = <b>45,184 gal/yr</b>. The user‑cited ~40,000 gal/yr implies 3.68 in of rain; with the older 1981–2010 normal of 3.84 in <a href="#r2">[2]</a> it is 41,709 gal.</p>
-<div class="note"><b>Check — "1 acre ≈ 40,000 gal/yr at 40%".</b> <span class="tag t-ok">holds (conservative)</span> Consistent with valley normals (41.7k–45.2k gal). Caveats: the 40% coefficient is an assumption, not measured for Mohave Mountain slopes; the mountain itself likely receives more rain than the city gauge, but no long‑term gauge there was found; and dry years can bring far less.</div>
-<div class="calc card">
-<div>
-<label>Catchment area <b><span id="vA"></span> acres</b><input type="range" id="A" min="0.1" max="50" step="0.1" value="1"></label>
-<label>Annual rainfall <b><span id="vP"></span> in</b><input type="range" id="P" min="0.5" max="15" step="0.01" value="4.16"></label>
-<label>Runoff coefficient <b><span id="vC"></span></b><input type="range" id="C" min="0.05" max="0.9" step="0.01" value="0.40"></label>
-<label>Storage loss to evaporation <b><span id="vE"></span>%</b><input type="range" id="E" min="0" max="80" step="1" value="0"></label>
-<label>Hydrogel panel area <b><span id="vH"></span> m²</b><input type="range" id="H" min="0" max="100" step="1" value="10"></label>
-<label>Hydrogel yield <b><span id="vHY"></span> gal/m²/day</b><input type="range" id="HY" min="0.5" max="1.5" step="0.05" value="0.53"></label>
-<p style="margin-top:14px"><button class="btn" data-p="4.16">Scenario: normal year (4.16 in)</button> <button class="btn" data-p="2">Scenario: dry year (2 in, illustrative)</button> <button class="btn" data-p="8">Scenario: wetter slopes (8 in, illustrative)</button></p>
+<section id="yield" data-view="catchment">
+<div class="kicker">Evidence · Estimate tool</div>
+<h2>Estimating runoff from mountain slopes</h2>
+<div class="note flag"><b>These are estimates, not measurements.</b> They use the NOAA valley-floor rainfall normal<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup> and an assumed runoff coefficient. No rain gauge or runoff measurement exists for the Mohave Mountains.</div>
+<p><b>Derivation:</b> 1 acre = 43,560 ft². 43,560 × (1/12 ft) × 7.48052 gal/ft³ = <b>27,154 gal per inch per acre</b>. At 4.16 in and C = 0.40, one acre gives 45,184 gal/yr. With the older 1981–2010 normal of 3.84 in<sup class="c"><a href="#r2" aria-label="Reference 2">2</a></sup>, it gives 41,709 gal/yr.</p>
+<div class="note"><b>Check: “1 acre ≈ 40,000 gal/yr at 40%”.</b> <span class="status s-ok">arithmetic holds</span> The claim is arithmetically consistent, but it is still an estimate. Across the assumed 0.20–0.60 coefficient range, one acre at 4.16 in gives about 22,600–67,800 gal/yr.</div>
+<div class="tool" id="tool">
+<div class="kicker">Estimate tool</div>
+<div class="tw"><table><caption>Assumptions (shown in full)</caption><thead><tr><th>Input</th><th>Value</th><th>Basis</th></tr></thead><tbody>
+<tr><td>Rainfall (in/yr)</td><td><output id="aP">4.16</output></td><td>Default: NOAA 1991–2020 normal at Lake Havasu City<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup>. User-adjustable. Mountain rainfall unknown<sup class="c">a</sup></td></tr>
+<tr><td>Runoff coefficient C (–)</td><td>0.20 / <output id="aC">0.40</output> / 0.60</td><td>Low / mid (slider) / high. <b>Assumed</b>, not measured here<sup class="c">b</sup></td></tr>
+<tr><td>Area (acres)</td><td><output id="aA">3206</output></td><td>Default: computed Falls Springs Wash catchment, 12.98 km²<sup class="c">c</sup></td></tr>
+<tr><td>Storage loss (%)</td><td><output id="aE">0</output></td><td>User assumption for evaporation and seepage</td></tr></tbody></table></div>
+<label>Catchment area <output id="vA"></output><input type="range" id="A" min="1" max="4000" step="1" value="3206" aria-describedby="fnc"></label>
+<button class="btn" type="button" data-area="3206">Falls Springs catchment (3,206 ac)</button><button class="btn" type="button" data-area="118">Sub-catchment D1 (118 ac)</button><button class="btn" type="button" data-area="1">1 acre</button>
+<label>Annual rainfall (in) <output id="vP"></output><input type="range" id="P" min="0.5" max="15" step="0.01" value="4.16"></label>
+<button class="btn" type="button" data-p="4.16">Normal year (4.16 in)</button><button class="btn" type="button" data-p="2">Dry year (2 in, illustrative)</button><button class="btn" type="button" data-p="8">Wetter slopes (8 in, illustrative)</button>
+<label>Runoff coefficient, mid (assumed) <output id="vC"></output><input type="range" id="C" min="0.2" max="0.6" step="0.01" value="0.40"></label>
+<label>Storage loss to evaporation (%) <output id="vE"></output><input type="range" id="E" min="0" max="80" step="1" value="0"></label>
+<div class="kicker" style="margin-top:16px">Estimated runoff (formula, not measured)</div>
+<div class="range-out" id="oG" aria-live="polite">–</div><div id="oMid" class="fn"></div>
+<div class="tw"><table><thead><tr><th>Case</th><th class="n">C (–)</th><th class="n">Runoff (gal/yr)</th><th class="n">Runoff (acre-ft/yr)</th><th class="n">Per acre (gal/yr)</th></tr></thead><tbody id="oTbl"></tbody></table></div>
+<h3>Hydrogel panels (illustrative)</h3>
+<label>Panel area (m²) <output id="vH"></output><input type="range" id="H" min="0" max="100" step="1" value="10"></label>
+<div class="range-out" id="oH">–</div>
+<p class="fn">Estimated gal/yr if run 365 days at 0.53–1.45 gal/m²/day (1.99–5.50 L)<sup class="c"><a href="#r23" aria-label="Reference 23">23</a></sup>. These figures are lab-to-field data from short outdoor tests in Las Vegas, not long-term operation. The water is <b>not potable as produced</b>; it is held in a salt solution<sup class="c"><a href="#r22" aria-label="Reference 22">22</a></sup>.</p>
+<p class="fn"><sup>a</sup> Higher elevations probably receive more rain than the valley gauge, but nothing has been measured here. <sup>b</sup> No source measured C for Mohave Mountain slopes; 0.20–0.60 is an assumed range for rocky slopes, to be replaced by protocol results. <span id="fnc"><sup>c</sup> D8 delineation on a resampled 3DEP DEM, not field-checked.</span> Formula: area × rainfall × 27,154 × C × (1 − loss). The 3D panel's bars show low, mid and high values at the catchment outlet.</p>
 </div>
-<div class="out">
-<div class="kicker">Modeled output</div>
-<div class="stat" id="oG">–</div><div>gallons captured per year</div>
-<p id="oDet" style="color:var(--muted);font-size:15px"></p>
-<div class="stat" id="oH" style="font-size:28px">–</div><div>gallons/year from hydrogel panels (365 days, illustrative)</div>
-<p style="font-size:13px;color:var(--muted)">Formula: area × rainfall × 27,154 × C × (1 − loss). All outputs are <span class="tag t-mod">modeled</span>. Hydrogel default 0.53 gal/m²/day = 1.99 L measured with natural wind <a href="#r23">[23]</a>.</p>
-</div></div>
-<div class="chart" style="margin-top:20px"><canvas id="yieldChart"></canvas></div>
-<p style="font-size:14px;color:var(--muted)">Comparison bars update with the sliders. Household reference: one acre‑foot (325,851 gal) supplies about three single‑family homes for a year, per the AZ Attorney General <a href="#r17">[17]</a>.</p>
-<style>.btn{background:#111a26;color:var(--ivory);border:1px solid var(--gold);border-radius:6px;padding:6px 10px;margin:3px 0;cursor:pointer;font-size:13px}.btn:hover{background:var(--gold);color:var(--bg)}</style>
+<figure class="fig"><div class="chart"><canvas id="yieldChart"></canvas></div><figcaption>Mid estimates compared with a household reference: one acre-foot (325,851 gal) supplies about three single-family homes for a year<sup class="c"><a href="#r17" aria-label="Reference 17">17</a></sup>.</figcaption></figure>
 </section>
 
-<section id="evap">
-<div class="kicker">Scenario: 110°F July</div>
+<section id="costs" data-view="overview">
+<div class="kicker">Evidence · Comparison</div>
+<h2>Water sources by reliability and cost</h2>
+<div class="tw"><table><caption>Table 5. Sources compared (costs are sourced or labeled unknown)</caption><thead><tr><th>Source</th><th>Reliability at Lake Havasu</th><th>Cost (USD per 1,000 gal)</th><th>Basis</th></tr></thead><tbody>
+<tr><td>Colorado River allocation (city tap water, retail)</td><td>High today. The state's supply is under shortage rules, but no cuts to 1st–3rd priority holders in 2026<sup class="c"><a href="#r39" aria-label="Reference 39">39</a></sup></td><td>$2.67–$3.34 (residential tiers)</td><td>$2.00–$2.50 per 100 ft³ (Sept 2024 rates)<sup class="c"><a href="#r42" aria-label="Reference 42">42</a></sup>; ÷ 0.748. Rates updated Feb 2026, not reflected here</td></tr>
+<tr><td>Reuse-water recharge</td><td>Steady: effluent is produced year-round<sup class="c"><a href="#r9" aria-label="Reference 9">9</a></sup></td><td>Unknown</td><td>No unit cost found</td></tr>
+<tr><td>Monsoon / winter runoff harvesting</td><td>Low and highly variable (4.16 in/yr normal)<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup></td><td>Unknown</td><td>Site-specific; no local cost data</td></tr>
+<tr><td>Fog nets</td><td>Very low: no persistent fog</td><td>$5.30–$62.80 at fog sites; not applicable here</td><td>$1.40–$16.60/m³ reported<sup class="c"><a href="#r43" aria-label="Reference 43">43</a></sup>; ×3.785</td></tr>
+<tr><td>MOF / hydrogel harvesters</td><td>Unproven at scale<sup class="c"><a href="#r22" aria-label="Reference 22">22</a>,<a href="#r24" aria-label="Reference 24">24</a></sup></td><td>Unknown</td><td>Pre-commercial</td></tr></tbody></table></div>
+</section>
+
+<section id="evap" data-view="city">
+<div class="kicker">Scenario: 110 °F July</div>
 <h2>Evaporation losses in extreme heat</h2>
-<p>July normal highs at Lake Havasu City reach 109°F, with about 178 days a year at or above 90°F <a href="#r1">[1]</a>. The nearest long pan‑evaporation record (Davis Dam) shows ~101.5 in/yr, peaking at 13.3 in in June <a href="#r3">[3]</a>; that is roughly 24 times the local rainfall. At the scale of the lake itself, Reclamation estimates Lake Havasu lost an average of <b>139,626 AF/yr</b> to evaporation in 2017–2021 <a href="#r4">[4]</a>.</p>
-<div class="tw"><table><thead><tr><th>Storage type</th><th>Evaporation exposure</th><th>Notes</th></tr></thead><tbody>
-<tr><td>Open pond / reservoir</td><td>Full: pan rates (adjusted by a lake coefficient) apply</td><td>Shallow ponds can lose much of a winter's capture by summer. <span class="tag t-mod">reasoned</span></td></tr>
-<tr><td>Covered tank (shade cover, floating cover)</td><td>Greatly reduced</td><td>Also limits algae and heat.</td></tr>
-<tr><td>Buried cistern</td><td>Near zero</td><td>Cost per gallon higher; cooler water.</td></tr>
-<tr><td>Sand dam / aquifer</td><td>Low: water stored in pore space</td><td>Sand pores hold ~25–40% of volume <a href="#r28">[28]</a>.</td></tr>
-</tbody></table></div>
+<p>July normal highs at Lake Havasu City reach 109 °F, with about 178 days a year at or above 90 °F<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup>. Pan evaporation at the nearest long record is about 101.5 in/yr, peaking at 13.3 in in June<sup class="c"><a href="#r3" aria-label="Reference 3">3</a></sup>.</p>
+<div class="tw"><table><caption>Table 6. Storage types and evaporation exposure</caption><thead><tr><th>Storage type</th><th>Evaporation exposure</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Open pond / reservoir</td><td>Full</td><td>Pan rates, adjusted by a lake coefficient, apply</td></tr>
+<tr><td>Covered tank</td><td>Greatly reduced</td><td>Also limits algae and heat</td></tr>
+<tr><td>Buried cistern</td><td>Near zero</td><td>Higher cost per gallon</td></tr>
+<tr><td>Sand dam / aquifer</td><td>Low</td><td>Sand pores hold ~25–40% of volume<sup class="c"><a href="#r28" aria-label="Reference 28">28</a></sup></td></tr></tbody></table></div>
 </section>
 
-<section id="storage">
+<section id="storage" data-view="catchment">
 <div class="kicker">Path · Step 3: Keep it</div>
 <h2>Underground storage solutions compared</h2>
-<div class="tw"><table><thead><tr><th>Option</th><th>Typical scale</th><th>Evaporation</th><th>Fit for Mohave Mtns / Havasu</th><th>Evidence</th></tr></thead><tbody>
-<tr><td>Buried cistern</td><td>Thousands to tens of thousands of gallons</td><td>Near zero</td><td>Good for homes, trailheads, habitat drinkers fed by slope catchments</td><td>Engineering standard practice</td></tr>
-<tr><td>Sand dam</td><td>Kenya: typically 2,000–10,000 m³ <a href="#r28">[28]</a></td><td>Low</td><td>Needs sandy wash on bedrock; Mohave washes are candidate sites, untested</td><td>Mixed: many Kenyan dams store &lt;1,000 m³ in practice <a href="#r29">[29]</a></td></tr>
-<tr><td>Vadose‑zone injection wells (ASR‑like)</td><td>Lake Havasu pilot: 180 AF in 5 months <a href="#r7">[7]</a></td><td>None</td><td>Proven locally with treated effluent</td><td>Strong (local monitoring)</td></tr>
-<tr><td>Infiltration basin / check‑dam recharge</td><td>Hualapai project credited 1,200 AF/yr (2021) <a href="#r14">[14]</a></td><td>Some, while ponded</td><td>Alluvial fans east of the city</td><td>Moderate, site‑specific <a href="#r26">[26]</a><a href="#r27">[27]</a></td></tr>
-</tbody></table></div>
+<div class="tw"><table><caption>Table 7. Underground storage options</caption><thead><tr><th>Option</th><th>Typical scale</th><th>Evaporation</th><th>Fit for the Mohave Mountains / Havasu</th><th>Evidence</th></tr></thead><tbody>
+<tr><td>Buried cistern</td><td>Thousands to tens of thousands of gal</td><td>Near zero</td><td>Homes, trailheads, wildlife drinkers</td><td>Standard practice</td></tr>
+<tr><td>Sand dam</td><td>Kenya: typically 2,000–10,000 m³<sup class="c"><a href="#r28" aria-label="Reference 28">28</a></sup></td><td>Low</td><td>Needs a sandy wash over bedrock; untested here</td><td>Mixed; many store &lt;1,000 m³<sup class="c"><a href="#r29" aria-label="Reference 29">29</a></sup></td></tr>
+<tr><td>Vadose-zone injection wells</td><td>Havasu pilot: 180 acre-ft in 5 months<sup class="c"><a href="#r7" aria-label="Reference 7">7</a></sup></td><td>None</td><td>Proven locally with effluent</td><td>Strong</td></tr>
+<tr><td>Infiltration basin / check dams</td><td>Hualapai project: 1,200 acre-ft/yr (2021)<sup class="c"><a href="#r14" aria-label="Reference 14">14</a></sup></td><td>Some, while water is ponded</td><td>Alluvial fans</td><td>Moderate<sup class="c"><a href="#r26" aria-label="Reference 26">26</a>,<a href="#r27" aria-label="Reference 27">27</a></sup></td></tr></tbody></table></div>
 </section>
 
-<section id="policy">
+<section id="policy" data-view="overview">
 <div class="kicker">Path · Step 5: Rules</div>
 <h2>Policy context</h2>
-<p>The <b>1980 Groundwater Management Act</b> created ADWR and initially designated four Active Management Areas (Phoenix, Pinal, Prescott, Tucson) and two Irrigation Non‑Expansion Areas <a href="#r30">[30]</a>. Today's AMAs: Phoenix, Pinal, Prescott, Tucson, Santa Cruz, Douglas (2022); INAs: Joseph City, Harquahala, Hualapai Valley <a href="#r30">[30]</a><a href="#r31">[31]</a>.</p>
-<div class="tw"><table><thead><tr><th></th><th>AMA</th><th>INA</th><th>Most rural AZ</th></tr></thead><tbody>
+<p>The 1980 Groundwater Management Act created ADWR. It designated four AMAs and two INAs<sup class="c"><a href="#r30" aria-label="Reference 30">30</a></sup>. Today there are six AMAs, including Santa Cruz and Douglas, and three INAs, including the Hualapai Valley<sup class="c"><a href="#r30" aria-label="Reference 30">30</a>,<a href="#r31" aria-label="Reference 31">31</a></sup>.</p>
+<div class="tw"><table><caption>Table 8. AMA vs. INA vs. most of rural Arizona</caption><thead><tr><th>Rule</th><th>AMA</th><th>INA</th><th>Most of rural AZ</th></tr></thead><tbody>
 <tr><td>New irrigated acreage</td><td>Barred</td><td>Barred</td><td>Allowed</td></tr>
-<tr><td>Metering &amp; reporting</td><td>Yes</td><td>Yes (non‑exempt wells) <a href="#r12">[12]</a></td><td>No</td></tr>
-<tr><td>Conservation requirements / management goals</td><td>Yes (e.g. safe‑yield goals) <a href="#r31">[31]</a></td><td>No</td><td>No</td></tr>
-<tr><td>Assured water supply for subdivisions</td><td>Required</td><td>No</td><td>No</td></tr></tbody></table></div>
-<p><b>Rural groundwater debate.</b> Bills to create locally led Rural Groundwater Management Areas, backed by Gov. Hobbs, have repeatedly stalled since 2017, including in 2025 <a href="#r16">[16]</a><a href="#r33">[33]</a>.</p>
-<p><b>Takings‑claim risk.</b> Opponents warn that limiting pumping could be a compensable taking. Arizona's Supreme Court upheld the GMA against such a challenge in <i>Town of Chino Valley v. City of Prescott</i> (1981), holding there is no vested right in groundwater before it is captured <a href="#r32">[32]</a>. Risk is lower than often claimed, but not zero for novel rules affecting existing uses. <span class="tag t-rep">legal interpretation, not legal advice</span></p>
+<tr><td>Metering and reporting</td><td>Yes</td><td>Yes<sup class="c"><a href="#r12" aria-label="Reference 12">12</a></sup></td><td>No</td></tr>
+<tr><td>Conservation goals</td><td>Yes<sup class="c"><a href="#r31" aria-label="Reference 31">31</a></sup></td><td>No</td><td>No</td></tr>
+<tr><td>Assured water supply</td><td>Required</td><td>No</td><td>No</td></tr></tbody></table></div>
+<p>Bills to create rural groundwater management areas have stalled repeatedly since 2017<sup class="c"><a href="#r16" aria-label="Reference 16">16</a>,<a href="#r33" aria-label="Reference 33">33</a></sup>. On takings risk: <i>Town of Chino Valley v. City of Prescott</i> (1981) upheld the Groundwater Management Act, holding there is no vested right in groundwater before it is captured<sup class="c"><a href="#r32" aria-label="Reference 32">32</a></sup>. <span class="status s-rep">legal interpretation, not advice</span></p>
 </section>
 
-<section id="evidence">
-<div class="kicker">Evidence &amp; reflection</div>
+<section id="evidence" data-view="overview">
+<div class="kicker">Evidence and reflection</div>
 <h2>Verification ledger</h2>
 <div class="tw"><table><thead><tr><th>Claim as given</th><th>Status</th><th>Finding</th></tr></thead><tbody>
-<tr><td>Crossman Peak ~5,103 ft</td><td><span class="tag t-ok">confirmed</span></td><td>5,102 ft (1,555 m) <a href="#r5">[5]</a></td></tr>
-<tr><td>Reuse‑water recharge since 1967</td><td><span class="tag t-fix">corrected</span></td><td>Effluent recharge began Dec 2008 <a href="#r7">[7]</a>; 1967 = first golf course <a href="#r10">[10]</a></td></tr>
-<tr><td>Hualapai deficit ~50,000 AF/yr</td><td><span class="tag t-ok">confirmed</span></td><td>50,474 AF/yr, Mohave County 2024 <a href="#r14">[14]</a>; ADWR 2022: ~34,000 <a href="#r13">[13]</a></td></tr>
-<tr><td>Out‑of‑state agribusiness</td><td><span class="tag t-ok">reported</span></td><td>AZCIR investigation <a href="#r16">[16]</a></td></tr>
-<tr><td>INA litigation / AG vs Fondomonte</td><td><span class="tag t-fix">clarified</span></td><td>INA designated Dec 2022 <a href="#r13">[13]</a>; Fondomonte suit is about La Paz County <a href="#r17">[17]</a>; no Hualapai INA lawsuit found</td></tr>
-<tr><td>Sacramento Valley recharge ~6,000 AF/yr</td><td><span class="tag t-ok">confirmed</span></td><td>USGS <a href="#r19">[19]</a>; range 5,000–10,000 <a href="#r20">[20]</a></td></tr>
-<tr><td>1 acre ≈ 40,000 gal/yr at 40%</td><td><span class="tag t-ok">holds</span></td><td>45,184 gal at 4.16 in <a href="#r1">[1]</a></td></tr>
-<tr><td>UNLV hydrogel ~1 gal/m²/day</td><td><span class="tag t-ok">supported, conditional</span></td><td>Press: ~1 gal <a href="#r22">[22]</a>; PNAS: 1.99–5.50 L <a href="#r23">[23]</a></td></tr>
-</tbody></table></div>
-<h3>Open questions</h3>
-<ul><li>What does it actually rain on Crossman Peak? No long‑term high‑elevation gauge was found in the Mohave Mountains.</li>
-<li>Measured runoff coefficients for local granite/volcanic slopes (the 40% figure is assumed).</li>
-<li>Water‑rights status of capturing flow from washes vs. roofs and bare slopes.</li>
-<li>Would Hualapai or Sacramento Valley meet AMA criteria if subsidence emerges?</li></ul>
-<h3>Next steps</h3>
-<ol><li>Download 3DEP 1 m lidar/DEM tiles for the Crossman Peak quad; run flow accumulation and delineate 3–5 candidate catchments.</li>
-<li>Install tipping‑bucket rain gauges and a small weir at one wash for a monsoon season to measure the runoff coefficient.</li>
-<li>Pilot a buried cistern vs. a covered tank and log losses through a summer.</li>
-<li>Contact ADWR and Lake Havasu City utilities about recharge data and permitting.</li></ol>
-
-<h2 style="margin-top:50px">References</h2>
+<tr><td>Crossman Peak ~5,103 ft</td><td><span class="status s-ok">confirmed</span></td><td>5,102 ft<sup class="c"><a href="#r5" aria-label="Reference 5">5</a></sup>; 5,103 ft per local guide<sup class="c"><a href="#r38" aria-label="Reference 38">38</a></sup></td></tr>
+<tr><td>Reuse-water recharge since 1967</td><td><span class="status s-fix">corrected</span></td><td>Since December 2008<sup class="c"><a href="#r7" aria-label="Reference 7">7</a></sup></td></tr>
+<tr><td>Hualapai deficit ~50,000 acre-ft/yr</td><td><span class="status s-ok">confirmed</span></td><td>50,474<sup class="c"><a href="#r14" aria-label="Reference 14">14</a></sup></td></tr>
+<tr><td>INA litigation / AG vs. Fondomonte</td><td><span class="status s-fix">clarified</span></td><td>The suit concerns La Paz County<sup class="c"><a href="#r17" aria-label="Reference 17">17</a></sup></td></tr>
+<tr><td>Sacramento Valley ~6,000 acre-ft/yr</td><td><span class="status s-ok">confirmed</span></td><td><sup class="c"><a href="#r19" aria-label="Reference 19">19</a></sup></td></tr>
+<tr><td>1 acre ≈ 40,000 gal/yr at 40%</td><td><span class="status s-est">estimate holds</span></td><td>45,184 gal<sup class="c"><a href="#r1" aria-label="Reference 1">1</a></sup></td></tr>
+<tr><td>UNLV hydrogel ~1 gal/m²/day</td><td><span class="status s-ok">conditional</span></td><td><sup class="c"><a href="#r22" aria-label="Reference 22">22</a>,<a href="#r23" aria-label="Reference 23">23</a></sup></td></tr>
+<tr><td>3DEP lidar ~28 pts/m², Oct 2023 – Sep 2024</td><td><span class="status s-ok">confirmed</span></td><td>28.28 pts/m²<sup class="c"><a href="#r58" aria-label="Reference 58">58</a></sup>. OpenTopography access is limited to academic or OT+ users; the DEMs are free via USGS<sup class="c"><a href="#r63" aria-label="Reference 63">63</a></sup></td></tr>
+<tr><td>Sentinel-1 at 10–20 m</td><td><span class="status s-fix">refined</span></td><td>5 × 20 m single-look (IW mode)<sup class="c"><a href="#r68" aria-label="Reference 68">68</a></sup></td></tr>
+<tr><td>WorldView at 30 cm</td><td><span class="status s-fix">refined</span></td><td>“30 cm class”; 0.34 m native<sup class="c"><a href="#r70" aria-label="Reference 70">70</a>,<a href="#r77" aria-label="Reference 77">77</a></sup></td></tr>
+<tr><td>Commercial $8–26/km²; tasking +50–100%</td><td><span class="status s-fix">refined</span></td><td>Archive ~$8–27/km². Archive is typically 40–60% cheaper than tasking<sup class="c"><a href="#r72" aria-label="Reference 72">72</a>,<a href="#r73" aria-label="Reference 73">73</a></sup></td></tr></tbody></table></div>
+<p>Open questions are listed near the top: <a href="#questions">what we don't know yet</a>. Contribute data through the <a href="protocol.html">validation protocol</a>.</p>
+<h2 style="margin-top:40px">References</h2>
 <ol class="refs">
-<li id="r1">NOAA NCEI, U.S. Climate Normals 1991–2020, Lake Havasu City (USC00024761). <a href="https://www.ncei.noaa.gov/access/services/data/v1?dataTypes=MLY-TMAX-NORMAL%2CMLY-TMIN-NORMAL%2CMLY-TAVG-NORMAL%2CMLY-PRCP-NORMAL%2CMLY-SNOW-NORMAL&dataset=normals-monthly-1991-2020&format=pdf&stations=USC00024761">NCEI summary</a>; tabulated at <a href="https://plainclimate.com/city/lake-havasu-city-az">PlainClimate</a>.</li>
+<li id="r1">NOAA NCEI, U.S. Climate Normals 1991–2020, Lake Havasu City (USC00024761); tabulated at PlainClimate. <a href="https://www.ncei.noaa.gov/access/services/data/v1?dataTypes=MLY-TMAX-NORMAL%2CMLY-TMIN-NORMAL%2CMLY-TAVG-NORMAL%2CMLY-PRCP-NORMAL%2CMLY-SNOW-NORMAL&amp;dataset=normals-monthly-1991-2020&amp;format=pdf&amp;stations=USC00024761">ncei.noaa.gov</a> <a href="https://plainclimate.com/city/lake-havasu-city-az">plainclimate.com</a></li>
 <li id="r2">WRCC, Lake Havasu City NCDC 1981–2010 Normals. <a href="https://wrcc.dri.edu/cgi-bin/cliNORMNCDC2010.pl?az4761">wrcc.dri.edu</a></li>
 <li id="r3">WRCC, Average Pan Evaporation comparative table (Davis Dam, AZ, 1948–1961). <a href="https://wrcc-archive.dri.edu/Climate/comp_table_show.php?stype=pan_evap_avg">wrcc-archive.dri.edu</a></li>
 <li id="r4">U.S. Bureau of Reclamation, Lower Colorado River Mainstream Evaporation and Riparian ET Losses Report, App. 3. <a href="https://www.usbr.gov/lc/region/g4000/4200Rpts/LCRBEvapReport/Appendix3.pdf">usbr.gov</a></li>
 <li id="r5">Peakbagger, Crossman Peak. <a href="https://www.peakbagger.com/peak.aspx?pid=4014">peakbagger.com</a></li>
-<li id="r6">USGS 3D Elevation Program. <a href="https://www.usgs.gov/3d-elevation-program">usgs.gov</a>; AWS Terrain Tiles, <a href="https://registry.opendata.aws/terrain-tiles/">registry.opendata.aws</a></li>
-<li id="r7">Lake Havasu City treated wastewater subsurface recharge study (EPA Science Inventory). <a href="https://cfpub.epa.gov/si/si_public_file_download.cfm?p_download_id=508832">cfpub.epa.gov</a>; abstract "Subsurface Effluent Injection Adjacent to the Colorado River".</li>
+<li id="r6">USGS 3D Elevation Program; AWS Terrain Tiles. <a href="https://www.usgs.gov/3d-elevation-program">usgs.gov</a> <a href="https://registry.opendata.aws/terrain-tiles/">registry.opendata.aws</a></li>
+<li id="r7">Lake Havasu City treated wastewater subsurface recharge study (EPA Science Inventory); abstract “Subsurface Effluent Injection Adjacent to the Colorado River”. <a href="https://cfpub.epa.gov/si/si_public_file_download.cfm?p_download_id=508832">cfpub.epa.gov</a></li>
 <li id="r8">Lake Havasu City, 2022 Wastewater Master Plan. <a href="https://www.lhcaz.gov/DocumentCenter/View/1587/Lake-Havasu-City-Wastewater-Master-Plan-2022-PDF">lhcaz.gov</a></li>
 <li id="r9">Lake Havasu City Water Supply &amp; Wastewater Treatment (Water Education Foundation). <a href="https://www.watereducation.org/sites/main/files/file-attachments/wlsonlake_havasu_city_water_supply_and_wastewater_treatment.pdf?1427146516=">watereducation.org</a></li>
-<li id="r10">RiverScene Magazine, "Early Days of the Lake Havasu Golf Club Parallels Birth of the City." <a href="https://riverscenemagazine.com/early-days-of-the-lake-havasu-golf-club-parallels-birth-of-the-city/">riverscenemagazine.com</a></li>
+<li id="r10">RiverScene Magazine, “Early Days of the Lake Havasu Golf Club Parallels Birth of the City.” <a href="https://riverscenemagazine.com/early-days-of-the-lake-havasu-golf-club-parallels-birth-of-the-city/">riverscenemagazine.com</a></li>
 <li id="r11">Lake Havasu City, 2020 Water Conservation Plan. <a href="https://www.lhcaz.gov/DocumentCenter/View/953/2020-Water-Conservation-Plan-PDF">lhcaz.gov</a></li>
 <li id="r12">ADWR, Hualapai INA FAQ. <a href="https://www.azwater.gov/ama/hualapai-ina-faq">azwater.gov</a></li>
 <li id="r13">ADWR, Findings, Decision and Order designating the Hualapai Valley INA (Dec 19, 2022). <a href="https://www.mohave.gov/media/uinnyix3/2022_12-19_final_hvina_findings_decision_and_order.pdf">mohave.gov</a></li>
 <li id="r14">Mohave County, 2024 Hualapai Valley Groundwater Basin Updated Forecast Report. <a href="https://www.mohave.gov/departments/development-services/mohave-county-water-information/documents/2024-hualapai-valley-groundwater-basin-updated-forecast-report/">mohave.gov</a></li>
 <li id="r15">Mohave County / ADWR, HVGB INA Public Comment Slideshow (9/20/2022). <a href="https://www.mohave.gov/departments/development-services/mohave-county-water-information/documents/hvgb-ina-public-comment-slideshow-date-9202022/">mohave.gov</a></li>
-<li id="r16">AZCIR, "Arizona's Hualapai Valley now a 'de facto transfer basin' for out‑of‑state interests" (Nov 2025). <a href="https://azcir.org/news/2025/11/13/out-of-state-interests-turn-haualapi-valley-into-de-facto-transfer-basin/">azcir.org</a></li>
-<li id="r17">Arizona Attorney General, "AG Mayes Sues Fondomonte…" <a href="https://www.azag.gov/press-release/attorney-general-mayes-sues-fondomonte-violating-public-nuisance-law-through">azag.gov</a></li>
-<li id="r18">Arizona Capitol Times, "Legal battle continues over Saudi groundwater pumping in Arizona" (Oct 11, 2025). <a href="https://azcapitoltimes.com/news/2025/10/11/legal-battle-continues-over-saudi-groundwater-pumping-in-arizona/">azcapitoltimes.com</a></li>
-<li id="r19">USGS SIR 2011‑5159, Groundwater Budgets for Detrital, Hualapai, and Sacramento Valleys. <a href="https://pubs.usgs.gov/sir/2011/5159/">pubs.usgs.gov</a></li>
+<li id="r16">AZCIR, “Arizona&#x27;s Hualapai Valley now a ‘de facto transfer basin’ for out-of-state interests” (Nov 2025). <a href="https://azcir.org/news/2025/11/13/out-of-state-interests-turn-haualapi-valley-into-de-facto-transfer-basin/">azcir.org</a></li>
+<li id="r17">Arizona Attorney General, “AG Mayes Sues Fondomonte…”. <a href="https://www.azag.gov/press-release/attorney-general-mayes-sues-fondomonte-violating-public-nuisance-law-through">azag.gov</a></li>
+<li id="r18">Arizona Capitol Times, “Legal battle continues over Saudi groundwater pumping in Arizona” (Oct 11, 2025). <a href="https://azcapitoltimes.com/news/2025/10/11/legal-battle-continues-over-saudi-groundwater-pumping-in-arizona/">azcapitoltimes.com</a></li>
+<li id="r19">USGS SIR 2011-5159, Groundwater Budgets for Detrital, Hualapai, and Sacramento Valleys. <a href="https://pubs.usgs.gov/sir/2011/5159/">pubs.usgs.gov</a></li>
 <li id="r20">Mohave County, Sacramento Valley Groundwater Basin Current Health and Status (2025). <a href="https://www.mohave.gov/media/3jud4ktv/sacramento-valley-groundwater-basin_2025.pdf">mohave.gov</a></li>
 <li id="r21">University of Arizona CCASS, Sacramento Valley Basin Profile. <a href="https://ccass.arizona.edu/sites/default/files/2026-06/Sacramento-Valley_Basin-Profile.pdf">ccass.arizona.edu</a></li>
-<li id="r22">UNLV News, "Watershed Moment…" (Oct 24, 2024). <a href="https://www.unlv.edu/news/release/watershed-moment-engineers-invent-high-yield-atmospheric-water-capture-device-arid">unlv.edu</a></li>
-<li id="r23">Gao, Cho et al., "High‑yield atmospheric water capture via bioinspired material segregation," PNAS (2024). <a href="https://www.pnas.org/doi/10.1073/pnas.2321429121">pnas.org</a></li>
-<li id="r24">Kim et al., "Practical water production from desert air," Science Advances (2018). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5993474/">PMC5993474</a></li>
-<li id="r25">Klemm et al., "Fog as a fresh‑water resource," Ambio (2012). <a href="https://www.fogquest.org/wp-content/uploads/2012/11/AMBIO-2012-Fog-Review-10.1007_s13280-012-0247-8.pdf">fogquest.org</a></li>
-<li id="r26">"The Effect of Gabion Construction on Infiltration in Ephemeral Streams," University of Arizona. <a href="https://repository.arizona.edu/handle/10150/622852">repository.arizona.edu</a></li>
-<li id="r27">USGS, "Hydrologic response of streams restored with check dams in the Chiricahua Mountains, Arizona." <a href="https://pubs.usgs.gov/publication/70145073">pubs.usgs.gov</a></li>
+<li id="r22">UNLV News, “Watershed Moment…” (Oct 24, 2024). <a href="https://www.unlv.edu/news/release/watershed-moment-engineers-invent-high-yield-atmospheric-water-capture-device-arid">unlv.edu</a></li>
+<li id="r23">Gao, Cho et al., “High-yield atmospheric water capture via bioinspired material segregation,” PNAS (2024). <a href="https://www.pnas.org/doi/10.1073/pnas.2321429121">pnas.org</a></li>
+<li id="r24">Kim et al., “Practical water production from desert air,” Science Advances (2018). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5993474/">pmc.ncbi.nlm.nih.gov</a></li>
+<li id="r25">Klemm et al., “Fog as a fresh-water resource,” Ambio (2012). <a href="https://www.fogquest.org/wp-content/uploads/2012/11/AMBIO-2012-Fog-Review-10.1007_s13280-012-0247-8.pdf">fogquest.org</a></li>
+<li id="r26">“The Effect of Gabion Construction on Infiltration in Ephemeral Streams,” University of Arizona. <a href="https://repository.arizona.edu/handle/10150/622852">repository.arizona.edu</a></li>
+<li id="r27">USGS, “Hydrologic response of streams restored with check dams in the Chiricahua Mountains, Arizona.” <a href="https://pubs.usgs.gov/publication/70145073">pubs.usgs.gov</a></li>
 <li id="r28">Maddrell &amp; Neal, Sand Dams: a Practical Guide (2012). <a href="https://www.samsamwater.com/library/Maddrell_and_Neal_2012_Sand_Dams_a_Practical_Guide_LR.pdf">samsamwater.com</a></li>
-<li id="r29">"Factors Affecting the Performance and Cost‑Efficiency of Sand Storage Dams in South‑Eastern Kenya," IAHR. <a href="https://www.iahr.org/library/infor?pid=7777">iahr.org</a></li>
-<li id="r30">Megdal/WRRC, "Managing Groundwater in Arizona." <a href="https://wrrc.arizona.edu/sites/wrrc.arizona.edu/files/2023-07/3-mast.pdf">wrrc.arizona.edu</a></li>
+<li id="r29">“Factors Affecting the Performance and Cost-Efficiency of Sand Storage Dams in South-Eastern Kenya,” IAHR. <a href="https://www.iahr.org/library/infor?pid=7777">iahr.org</a></li>
+<li id="r30">Megdal/WRRC, “Managing Groundwater in Arizona.” <a href="https://wrrc.arizona.edu/sites/wrrc.arizona.edu/files/2023-07/3-mast.pdf">wrrc.arizona.edu</a></li>
 <li id="r31">ADWR, Active Management Area Overview. <a href="https://www.azwater.gov/ama/active-management-area-overview">azwater.gov</a></li>
-<li id="r32">Town of Chino Valley v. City of Prescott, 638 P.2d 1324 (Ariz. 1981). <a href="https://hallapproved.com/az/cases/supreme/1981/1226454/">case text</a></li>
+<li id="r32">Town of Chino Valley v. City of Prescott, 638 P.2d 1324 (Ariz. 1981). <a href="https://hallapproved.com/az/cases/supreme/1981/1226454/">hallapproved.com</a></li>
 <li id="r33">AP News, Arizona rural groundwater legislation. <a href="https://apnews.com/article/arizona-groundwater-legislation-900b9eba11d5074e2832893b139a0324">apnews.com</a></li>
-<li id="r34">USGS SIR 2013‑5122, Aquifers in Detrital, Hualapai, and Sacramento Valleys. <a href="https://pubs.usgs.gov/sir/2013/5122/pdf/sir2013-5122.pdf">pubs.usgs.gov</a></li>
+<li id="r34">USGS SIR 2013-5122, Aquifers in Detrital, Hualapai, and Sacramento Valleys. <a href="https://pubs.usgs.gov/sir/2013/5122/pdf/sir2013-5122.pdf">pubs.usgs.gov</a></li>
+<li id="r35">MRA, Radio Tower Site – Crossman Peak (34.5515278, −114.1943889; ground 4,711.9 ft). <a href="https://mra-raycom.com/other-sites/arizona/radio-tower-site-crossman-peak-lake-havasu-mojave-county-arizona/">mra-raycom.com</a></li>
+<li id="r36">RadioReference, Site: Crossman Peak (34.5515, −114.1944). <a href="https://www.radioreference.com/db/site/40717">radioreference.com</a></li>
+<li id="r37">TopoQuest (USGS GNIS), Falls Springs Wash, AZ (N34.529456°, W114.266620°, 1,751 ft). <a href="https://topoquest.com/place/arizona/stream/falls-springs-wash/4545">topoquest.com</a></li>
+<li id="r38">RiverScene Magazine, “Exploring Havasu: Crossman Peak.” <a href="https://riverscenemagazine.com/exploring-havasu-crossman-peak/">riverscenemagazine.com</a></li>
+<li id="r39">U.S. Bureau of Reclamation, 2026 Arizona water approval letter (Tier 1 shortage, CY 2026). <a href="https://www.usbr.gov/lc/region/g4000/4200Rpts/Approvals/2026/AZ/WA_AS_AZ_2026_ASLD_Approval.pdf">usbr.gov</a></li>
+<li id="r40">U.S. Bureau of Reclamation, Post-2026 Operations Draft EIS, TA 4: Water Deliveries. <a href="https://www.usbr.gov/ColoradoRiverBasin/post2026/draft-eis/docs/vol-3/P26-DEIS-TA-04.pdf">usbr.gov</a></li>
+<li id="r41">Arizona Globe, “Lake Mead&#x27;s New Low Makes AZ First for Colorado River Cuts.” <a href="https://arizonaglobe.com/water/lake-meads-new-low-makes-az-first-for-colorado-river-cuts/">arizonaglobe.com</a></li>
+<li id="r42">Lake Havasu City, Water and Sewer Rates (effective Sept 1, 2024). <a href="https://www.lhcaz.gov/docs/default-source/department-documents/water-and-sewer-rates.pdf?sfvrsn=a9c2ae7c_38">lhcaz.gov</a></li>
+<li id="r43">Qadir et al., “Fog Water Collection: Challenges beyond Technology,” Water 10(4):372 (2018). <a href="https://www.mdpi.com/2073-4441/10/4/372">mdpi.com</a></li>
+<li id="r44">“Optimization of UAV Flight Missions in Steep Terrain,” Remote Sensing 12(8):1293 (2020). <a href="https://www.mdpi.com/2072-4292/12/8/1293">mdpi.com</a></li>
+<li id="r45">“Ground-Control Networks for Image Based Surface Reconstruction…,” Remote Sensing 8(9):786 (2016). <a href="https://www.mdpi.com/2072-4292/8/9/786">mdpi.com</a></li>
+<li id="r46">“Direct Georeferencing UAV-SfM in High-Relief Topography…,” Remote Sensing 14(3):490 (2022). <a href="https://www.mdpi.com/2072-4292/14/3/490">mdpi.com</a></li>
+<li id="r47">14 CFR Part 107, Small Unmanned Aircraft Systems (eCFR). <a href="https://www.ecfr.gov/current/title-14/chapter-I/subchapter-F/part-107">ecfr.gov</a></li>
+<li id="r48">FAA, Part 107 Airspace Authorizations (LAANC). <a href="https://www.faa.gov/uas/commercial_operators/part_107_airspace_authorizations">faa.gov</a></li>
+<li id="r49">FAA NFDC, Airport data: Lake Havasu City (KHII). <a href="https://nfdc.faa.gov/nfdcApps/services/ajv5/airportDisplay.jsp?airportId=KHII">nfdc.faa.gov</a></li>
+<li id="r50">Los Angeles ARTCC, Lake Havasu City Airport (KHII), Class G. <a href="https://laartcc.org/airport/KHII">laartcc.org</a></li>
+<li id="r51">BLM, Lake Havasu Field Office. <a href="https://www.blm.gov/office/lake-havasu-field-office">blm.gov</a></li>
+<li id="r52">WAPA, Crossman Peak Communications Facility Project Draft Environmental Assessment (2023). <a href="https://www.wapa.gov/wp-content/uploads/2023/04/crossman-peak-comm-EA-2023_D-Vol1-MainText.pdf">wapa.gov</a></li>
+<li id="r53">ADWR, Underground Water Storage, Savings and Replenishment (permit types). <a href="https://www.azwater.gov/types-recharge-permits">azwater.gov</a></li>
+<li id="r54">A.R.S. § 45-811.01, Underground storage facility permit. <a href="https://www.azleg.gov/ars/45/00811-01.htm">azleg.gov</a></li>
+<li id="r55">ACHP, Section 106 Applicant Toolkit. <a href="https://www.achp.gov/digital-library-section-106-landing/section-106-applicant-toolkit">achp.gov</a></li>
+<li id="r56">USBR, Water Measurement Manual, Ch. 7 Weirs: §9 Standard Contracted Rectangular Weirs (Francis eq. 7-4). <a href="https://www.usbr.gov/tsc/techreferences/mands/wmm/chap07_09.html">usbr.gov</a></li>
+<li id="r57">USGS, About 3DEP Products &amp; Services. <a href="https://www.usgs.gov/3d-elevation-program/about-3dep-products-services">usgs.gov</a></li>
+<li id="r58">OpenTopography, USGS 3DEP – AZ MohaveCoconino 1 D23. <a href="https://portal.opentopography.org/usgsDataset?dsid=AZ_MohaveCoconino_1_D23">portal.opentopography.org</a></li>
+<li id="r59">USGS Earth MRI, Arizona Mohave lidar acquisition project. <a href="https://mrdata.usgs.gov/earthmri/data-acquisition/project.php?f=html&amp;pid=10025">mrdata.usgs.gov</a></li>
+<li id="r60">Registry of Open Data on AWS, USGS 3DEP LiDAR Point Clouds. <a href="https://registry.opendata.aws/usgs-lidar/">registry.opendata.aws</a></li>
+<li id="r61">USGS Science Data Catalog, 1/3 arc-second DEMs (~10 m). <a href="https://data.usgs.gov/datacatalog/data/USGS:3a81321b-c153-416f-98b7-cc8e5f0e17c3">data.usgs.gov</a></li>
+<li id="r62">USGS Science Data Catalog, 1 arc-second DEMs (~30 m). <a href="https://data.usgs.gov/datacatalog/data/USGS:35f9c4d4-b113-4c8d-8691-47c428c29a5b">data.usgs.gov</a></li>
+<li id="r63">USGS TNM Access API query: 1 m DEM tiles for this study area (AZ_Mohave_D23 and others). <a href="https://tnmaccess.nationalmap.gov/api/v1/products?datasets=Digital%20Elevation%20Model%20(DEM)%201%20meter&amp;bbox=-114.40,34.40,-114.05,34.65&amp;max=50&amp;outputFormat=JSON">tnmaccess.nationalmap.gov</a></li>
+<li id="r64">USGS 3DEP Elevation ImageServer (source of the terrain in the 3D panel). <a href="https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer">elevation.nationalmap.gov</a></li>
+<li id="r65">Copernicus Data Space, Sentinel-2 documentation. <a href="https://documentation.dataspace.copernicus.eu/Data/SentinelMissions/Sentinel2.html">documentation.dataspace.copernicus.eu</a></li>
+<li id="r66">USGS Fact Sheet 2017-3026, Distribution of ESA&#x27;s Sentinel-2 Data. <a href="https://pubs.usgs.gov/fs/2017/3026/fs20173026.pdf">pubs.usgs.gov</a></li>
+<li id="r67">NASA Science, Landsat 9. <a href="https://science.nasa.gov/mission/landsat-9/">science.nasa.gov</a></li>
+<li id="r68">ESA, Sentinel-1 Facts and figures. <a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-1/Facts_and_figures">esa.int</a></li>
+<li id="r69">Planet Documentation, SkySat. <a href="https://docs.planet.com/data/imagery/skysat/">docs.planet.com</a></li>
+<li id="r70">ESA Earth Online, WorldView Legion full archive and tasking. <a href="https://earth.esa.int/eogateway/catalog/worldview-legion-full-archive-and-tasking">earth.esa.int</a></li>
+<li id="r71">Vantor, Open Data Program (disaster response imagery). <a href="https://vantor.com/company/open-data-program/">vantor.com</a></li>
+<li id="r72">Geopera, Satellite Imagery Pricing (rate card). <a href="https://geopera.com/pricing">geopera.com</a></li>
+<li id="r73">Geopera, “How to Buy Satellite Imagery in 2026: Prices and Process.” <a href="https://geopera.com/blog/how-to-buy-satellite-imagery">geopera.com</a></li>
+<li id="r74">Geopera, “How Much Does Satellite Imagery Cost in 2026?” <a href="https://geopera.com/blog/satellite-imagery-cost-guide">geopera.com</a></li>
+<li id="r75">Off-Nadir Delta, “Free vs Commercial Satellite Imagery: Resolution &amp; Cost.” <a href="https://offnadir-delta.com/blog/free-vs-commercial-satellite-imagery">offnadir-delta.com</a></li>
+<li id="r76">Geopera, “Drone vs Aerial vs Satellite Imagery: Which to Use When.” <a href="https://geopera.com/blog/drone-vs-aerial-vs-satellite-imagery">geopera.com</a></li>
+<li id="r77">Pix-Pro, “Satellite, Airplane, Drone: The Three Scales of Photogrammetry” (Oct 2026). <a href="https://www.pix-pro.com/index.php/blog/satellite-vs-aircraft-vs-drone-photogrammetry">pix-pro.com</a></li>
+<li id="r78">The Future 3D, “Drone LiDAR vs Photogrammetry vs Satellite.” <a href="https://www.thefuture3d.com/equipment/compare/drone-lidar-vs-photogrammetry-vs-satellite/">thefuture3d.com</a></li>
+<li id="r79">The Future 3D, “Which Aerial Survey Method Do I Need?” <a href="https://www.thefuture3d.com/tools/aerial-survey-method-selector/">thefuture3d.com</a></li>
+<li id="r80">EOX, Sentinel-2 cloudless (s2maps.eu), 2020 release, CC BY-NC-SA 4.0. <a href="https://s2maps.eu/">s2maps.eu</a></li>
+<li id="r81">USBR, Water Measurement Manual, Ch. 7 §11: Fully Contracted Standard 90-Degree V-Notch Weir (Cone eq. 7-6). <a href="https://www.usbr.gov/tsc/techreferences/mands/wmm/chap07_11.html">usbr.gov</a></li>
+<li id="r82">WMO (2008) recommended minimum precipitation-station densities, as tabulated in NPTEL Hydrology lecture 2.3 (Guide to Hydrological Practices, WMO-No. 168). <a href="https://archive.nptel.ac.in/content/storage2/courses/105107129/module2/lecture2/lecture2.pdf">archive.nptel.ac.in</a> <a href="https://www.hydrology.nl/images/docs/hwrp/WMO_Guide_168_Vol_I_en.pdf">hydrology.nl</a></li>
+<li id="r83">NWS Tucson, Monsoon Safety / Flash Flood Safety. <a href="https://www.weather.gov/twc/monsoonsafety">weather.gov</a></li>
+<li id="r84">NWS, Turn Around Don&#x27;t Drown. <a href="https://www.weather.gov/safety/flood-turn-around-dont-drown">weather.gov</a></li>
+<li id="r85">Arizona Emergency Information Network, Monsoon Awareness. <a href="https://ein.az.gov/monsoon-awareness">ein.az.gov</a></li>
 </ol>
 </section>
-<footer>Research notebook by Jack Felke · Compiled October 2026 · Figures cited inline; values tagged <span class="tag t-mod">modeled</span> are calculations, not measurements.</footer>
+<footer>Research notebook by Jack Felke · Compiled October 2026. Values marked <span class="status s-est">estimate</span> are formula outputs, not measurements. Terrain: USGS 3DEP (public domain). Optional imagery: Sentinel-2 cloudless 2020 by EOX (CC BY-NC-SA 4.0), containing modified Copernicus Sentinel data. Text CC BY 4.0. Source: <a href="https://github.com/TerminalGravity/desert-water-research">GitHub</a>.</footer>
 </main>
+<aside class="stage" id="stage" aria-label="3D terrain panel">
+<canvas id="scene" aria-label="3D view of USGS 3DEP elevation for the Mohave Mountains"></canvas>
+<div id="labels"></div>
+<div class="hud" role="group" aria-label="Terrain controls">
+<button class="btn" type="button" id="srcLidar" aria-pressed="true">Source: USGS 3DEP</button><button class="btn" type="button" id="srcDrone" aria-pressed="false">Drone ortho (pending)</button><button class="btn" type="button" id="texToggle" aria-pressed="false">Satellite</button><button class="btn" type="button" id="homeBtn">Reset view</button>
+</div>
+<div id="mcard" role="dialog" aria-modal="false" aria-labelledby="mcTitle"><button class="x" type="button" aria-label="Close">×</button><h4 id="mcTitle"></h4><div id="mcBody"></div></div>
+<div id="loading">Loading terrain…</div>
+<div id="fallback" style="background-image:url(assets/terrain/hillshade.jpg)"><p>3D view unavailable (WebGL not supported). Static map: USGS 3DEP hillshade with 100 m contours and computed flow paths; north is up.</p></div>
+<div class="attrib"><span id="srcInd">Source: USGS 3DEP elevation, served as best-available DEM (1 m lidar exists here), shown on a ~50 m mesh</span> · 1.5× vertical exaggeration · <span id="texAttr">Shading: hillshade, 100 m contours, D8 flow paths</span></div>
+</aside>
+</div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="assets/app.js"></script>
+<script type="module" src="assets/scene.js"></script>
 </body></html>

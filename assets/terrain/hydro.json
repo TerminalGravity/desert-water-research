@@ -1,0 +1,33 @@
+{
+ "main": {
+  "name": "Falls Springs Wash catchment above GNIS point",
+  "outlet": [
+   34.52846,
+   -114.26837
+  ],
+  "area_km2": 12.98,
+  "area_acres": 3206,
+  "max_elev_m": 1546.1,
+  "min_elev_m": 529.4
+ },
+ "drone": {
+  "name": "Sub-catchment D1 (proposed drone survey footprint)",
+  "outlet": [
+   34.54857,
+   -114.20598
+  ],
+  "area_km2": 0.479,
+  "area_acres": 118,
+  "max_elev_m": 1425.8,
+  "min_elev_m": 1048.5
+ },
+ "grid": [
+  1280,
+  1120
+ ],
+ "cell_m": [
+  25.1,
+  24.8
+ ],
+ "method": "Priority-flood fill + D8 flow accumulation on USGS 3DEP ImageServer export resampled to this grid"
+}

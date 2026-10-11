@@ -1,0 +1,2 @@
+event_id,site_id,date_local,storm_start_local,storm_end_local,duration_min,gauge_id,gauge_lat,gauge_lon,gauge_elev_ft,rainfall_depth_in,weir_type,weir_crest_length_ft,stage_time_local,stage_head_ft,discharge_cfs,bucket_volume_gal,bucket_fill_time_s,runoff_volume_gal,catchment_area_acres,antecedent_soil_moisture,observer,photo_refs,notes
+EXAMPLE-0001,D1-WEIR,2027-08-14,15:20,16:05,45,G-D1-UP,,,,0.00,90deg_vnotch,,15:40,0.00,0.000,,,0,118,dry,initials,IMG_0001.jpg;IMG_0002.jpg,"Example row only - replace with real observations; leave blanks rather than guessing"

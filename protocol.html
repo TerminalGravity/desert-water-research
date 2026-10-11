@@ -1,0 +1,86 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Runoff Validation Protocol: Mohave Mountains | Desert Water Research</title>
+<meta name="description" content="An open, reproducible method for measuring rainfall and runoff in small washes of the Mohave Mountains, Arizona.">
+<link rel="stylesheet" href="assets/style.css">
+<style>main.single{max-width:74ch;margin:0 auto;padding:0 24px 80px}.eq{font-family:var(--mono);background:var(--panel);border:1px solid var(--rule);padding:10px 14px;margin:10px 0;font-size:.9rem}</style>
+</head><body>
+<nav class="toc" aria-label="Contents"><a class="brand" href="index.html">Desert Water Research</a><a href="index.html#method">Method</a><a href="index.html#questions">Open questions</a><a href="index.html#roadmap">Roadmap</a><a href="#top" class="on">Validation protocol</a><a href="#gauges">Gauges</a><a href="#weir">Weir</a><a href="#safety">Safety</a><a href="#log">Log template</a><a href="#compute">Compute C</a><a href="#permits">Permission</a><a href="#license">License</a></nav>
+<main class="single" id="top">
+<section>
+<div class="kicker">Protocol · Version 0.1 (draft, October 2026)</div>
+<h1>Measuring runoff in the Mohave Mountains: an open validation protocol</h1>
+<p class="lede">The estimate tool on the main page relies on an <b>assumed</b> runoff coefficient (0.20–0.60) and on <b>valley-floor</b> rainfall. This protocol replaces those assumptions with measurements anyone can repeat and check.</p>
+<p>It answers two open questions: how much rain falls on the mountain, and what fraction runs off (<a href="index.html#questions">open questions</a>). Citations refer to the <a href="index.html#evidence">numbered references</a> on the main page.</p>
+<div class="note flag"><b>Status:</b> No measurements have been made yet. This page is a method, not a set of results.</div>
+</section>
+
+<section id="gauges">
+<h2>1. Rain gauge placement</h2>
+<p><b>Rationale.</b> WMO's recommended <i>minimum</i> density for mountainous regions is one non-recording gauge per 250 km²<sup class="c"><a href="index.html#r82" aria-label="Reference 82">82</a></sup>. That is meant for regional networks. The Falls Springs Wash catchment is only about 13 km², and monsoon cells are small, so this protocol uses a much denser design to resolve how rainfall changes with elevation (a design choice, not a WMO requirement).</p>
+<div class="tw"><table><caption>Table P1. Proposed gauge transect (elevations from cited sources; exact coordinates set in the field)</caption><thead><tr><th>Gauge ID</th><th>Location</th><th class="n">Approx. elevation (ft)</th><th>Purpose</th></tr></thead><tbody>
+<tr><td>G0</td><td>Lake Havasu City NOAA station (existing)</td><td class="n">valley floor</td><td>Long-term reference<sup class="c"><a href="index.html#r1" aria-label="Reference 1">1</a></sup></td></tr>
+<tr><td>G1</td><td>Falls Springs Wash at GNIS point</td><td class="n">1,751</td><td>Fan apex / catchment outlet<sup class="c"><a href="index.html#r37" aria-label="Reference 37">37</a></sup></td></tr>
+<tr><td>G2</td><td>Road end below service road</td><td class="n">3,275</td><td>Mid-slope<sup class="c"><a href="index.html#r38" aria-label="Reference 38">38</a></sup></td></tr>
+<tr><td>G3</td><td>Near the radio towers (outside the tower compound)</td><td class="n">~4,700</td><td>Upper ridge<sup class="c"><a href="index.html#r35" aria-label="Reference 35">35</a>,<a href="index.html#r38" aria-label="Reference 38">38</a></sup></td></tr>
+<tr><td>G4, G5</td><td>Inside sub-catchment D1 (upper and lower)</td><td class="n">~3,440–4,680</td><td>Pair with the D1 weir to compute C (elevation range from the D8 delineation)</td></tr></tbody></table></div>
+<ul><li>Use tipping-bucket gauges with data loggers (time-stamped tips). Pair each with a manual storage gauge so the readings can be cross-checked.</li>
+<li>Mount the orifice level, away from overhanging rock or vegetation, on secure footings. Record coordinates with GNSS.</li>
+<li>Service the gauges after every storm and at least monthly.</li></ul>
+</section>
+
+<section id="weir">
+<h2>2. Measuring flow in a small wash</h2>
+<p>Pick a short reach of bedrock or stable channel near the D1 outlet. Fix a thin-plate weir across it, sealed to the bedrock so water cannot bypass the plate. Install a stage logger or staff gauge in the pool upstream.</p>
+<h3>Option A: 90° V-notch (best for small flows)</h3>
+<div class="eq">Q = 2.49 · h<sup>2.48</sup> &nbsp;&nbsp; (Q in ft³/s, h = head in ft)</div>
+<p>This is the Cone equation for a fully contracted standard 90° V-notch. Use it only for 0.05–4.25 ft³/s. Keep the notch at least two heads from the channel sides and bottom. Measure head at least four heads upstream<sup class="c"><a href="index.html#r81" aria-label="Reference 81">81</a></sup>.</p>
+<h3>Option B: about 1 m (3.28 ft) sharp-crested rectangular weir</h3>
+<div class="eq">Q = 3.33 · h<sup>3/2</sup> · (L − 0.2h) &nbsp;&nbsp; (Q in ft³/s; L, h in ft)</div>
+<p>This is the Francis equation for a standard fully contracted rectangular weir. Do not use it for heads greater than one-third of the crest length. Crest height and side contractions must be at least 2 × the maximum head. Measure head at least 4 × the maximum head upstream<sup class="c"><a href="index.html#r56" aria-label="Reference 56">56</a></sup>. If these conditions can't be met, rate the weir with the Kindsvater–Carter method<sup class="c"><a href="index.html#r56" aria-label="Reference 56">56</a></sup>.</p>
+<h3>Option C: bucket-and-timer (very small flows)</h3>
+<div class="eq">Q (gal/s) = bucket volume (gal) ÷ fill time (s)</div>
+<p>Direct the whole flow through a pipe or spout into a bucket of known volume. Repeat at least three times and average.</p>
+<h3>Runoff volume</h3>
+<p>Integrate discharge over the hydrograph. Sum Q × Δt across the logger intervals and convert: 1 ft³ = 7.48052 gal.</p>
+</section>
+
+<section id="safety">
+<h2>3. Flash-flood safety</h2>
+<div class="callout">
+<ul style="margin:0">
+<li><b>Never be in the wash during a storm.</b> Install, read and service equipment only in dry weather. Retrieve logger data afterwards.</li>
+<li>Flash floods can arrive from distant storms over the mountains. Check forecasts and warnings, and leave washes immediately if a Flash Flood Warning is issued<sup class="c"><a href="index.html#r83" aria-label="Reference 83">83</a></sup>.</li>
+<li>Six inches of fast-moving water can knock an adult down<sup class="c"><a href="index.html#r84" aria-label="Reference 84">84</a>,<a href="index.html#r85" aria-label="Reference 85">85</a></sup>. Do not drive or park in washes; “Turn Around Don't Drown”<sup class="c"><a href="index.html#r84" aria-label="Reference 84">84</a></sup>.</li>
+<li>Debris flows can start on dry slopes after only minutes of intense rain<sup class="c"><a href="index.html#r85" aria-label="Reference 85">85</a></sup>. Abandoned mine shafts line the access road; stay out of them<sup class="c"><a href="index.html#r38" aria-label="Reference 38">38</a></sup>.</li>
+<li>Work in pairs, carry water, and avoid summer midday heat. Leave a trip plan with someone.</li></ul>
+</div>
+</section>
+
+<section id="log">
+<h2>4. Logging template</h2>
+<p>Download <a href="data/runoff_log_template.csv" download>runoff_log_template.csv</a> (CC0). Use one row per gauge or stage reading per event. Fields include date; storm start, end and duration; rainfall depth per gauge; stage readings and discharge; bucket volume and time; runoff volume; catchment area; antecedent soil moisture (dry, damp or wet, or a sensor value); observer; photo references; and notes. Leave fields blank rather than estimating.</p>
+</section>
+
+<section id="compute">
+<h2>5. Computing the runoff coefficient</h2>
+<div class="eq">C = runoff volume ÷ (rainfall depth × catchment area)</div>
+<p>Use consistent units. For example, runoff in gallons ÷ (rainfall in inches × area in acres × 27,154 gal per acre-inch). Use the area-weighted rainfall from the gauges inside the catchment. Report C for each event, along with rainfall depth, rainfall intensity and antecedent moisture: C varies from storm to storm.</p>
+<p><b>How results update the estimate tool:</b> The tool's coefficient range is currently assumed (0.20–0.60). Once at least five storm events have been measured at the D1 weir, the low and high bounds will be replaced by the 10th and 90th percentile measured event coefficients, and the mid value by the median. Each change will be committed with the data in the repository, so it can be audited.</p>
+</section>
+
+<section id="permits">
+<h2>6. Permission notes</h2>
+<ul><li>Most of the Mohave Mountains are public land administered by the BLM Lake Havasu Field Office. Contact the office before placing any gauge, weir or logger, and ask what authorization is needed<sup class="c"><a href="index.html#r51" aria-label="Reference 51">51</a></sup>.</li>
+<li>Federal authorizations may trigger NEPA review<sup class="c"><a href="index.html#r52" aria-label="Reference 52">52</a></sup> and Section 106 cultural-resources consultation<sup class="c"><a href="index.html#r55" aria-label="Reference 55">55</a></sup>.</li>
+<li>Stay clear of the radio-tower compound; warning signs are posted there<sup class="c"><a href="index.html#r38" aria-label="Reference 38">38</a></sup>.</li>
+<li>Drone flights follow FAA Part 107<sup class="c"><a href="index.html#r47" aria-label="Reference 47">47</a></sup>. See the <a href="index.html#roadmap">roadmap</a>.</li></ul>
+</section>
+
+<section id="license">
+<h2>7. License and call for data</h2>
+<p>This protocol is shared infrastructure: anyone may use, adapt and improve it. The text is licensed <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, and the logging template is dedicated to the public domain under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a>.</p>
+<p><b>Call for data:</b> If you measure rainfall or runoff in the Mohave Mountains, or know of an existing gauge, please <a href="https://github.com/TerminalGravity/desert-water-research/issues/new">open an issue on GitHub</a> and attach your CSV, method notes and photos. Corrections to this protocol are welcome the same way.</p>
+</section>
+<footer><a href="index.html">← Back to the main study</a></footer>
+</main>
+</body></html>
